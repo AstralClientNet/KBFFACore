@@ -19,6 +19,7 @@ use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\mcpe\protocol\EventPacket;
 use pocketmine\network\mcpe\protocol\LevelEventPacket;
 use TheBarii\Listeners\PlayerListener;
+use TheBarii\Listeners\BlockListener;
 
 
 class Main extends PluginBase{
@@ -35,6 +36,7 @@ class Main extends PluginBase{
 public function setListeners(){
     $map=$this->getServer()->getPluginManager();
     $map->registerEvents(new PlayerListener($this), $this);
+    $map->registerEvents(new BlockListener($this), $this);
 }
 
 

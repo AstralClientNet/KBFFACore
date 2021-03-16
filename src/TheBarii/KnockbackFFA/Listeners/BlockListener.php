@@ -34,10 +34,15 @@ use pocketmine\event\entity\EntityLevelChangeEvent;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\BlockPlaceEvent;
 
-class PlayerListener extends Listener{
+class BlockListener extends Listener{
 
     public function __construct(KnockbackFFA $plugin){
         $this->plugin=$plugin;
+    }
+
+    public function onPlace(BlockPlaceEvent $e){
+        sleep(20);
+        $e->setCancelled();
     }
 
    public function onBreak(BlockBreakEvent $e){
