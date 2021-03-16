@@ -14,6 +14,23 @@ use pocketmine\math\Vector3;
 use pocketmine\network\mcpe\protocol\LevelEventPacket;
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 use pocketmine\network\mcpe\protocol\PlaySoundPacket;
+use pocketmine\event\player\PlayerCreationEvent;
+use pocketmine\event\player\PlayerChatEvent;
+use pocketmine\event\player\PlayerJoinEvent;
+use pocketmine\event\player\PlayerExhaustEvent;
+use pocketmine\event\player\PlayerPreLoginEvent;
+use pocketmine\event\player\PlayerQuitEvent;
+use pocketmine\event\player\PlayerMoveEvent;
+use pocketmine\event\player\PlayerDeathEvent;
+use pocketmine\event\player\PlayerRespawnEvent;
+use pocketmine\event\player\PlayerCommandPreprocessEvent;
+use pocketmine\event\inventory\CraftItemEvent;
+use pocketmine\event\player\PlayerDropItemEvent;
+use pocketmine\event\entity\EntityDeathEvent;
+use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\event\entity\EntityRegainHealthEvent;
+use pocketmine\event\entity\EntityDamageByEntityEvent;
+use pocketmine\event\entity\EntityLevelChangeEvent;
 
 class PlayerListener extends Listener{
 
@@ -26,19 +43,82 @@ class PlayerListener extends Listener{
         $p = $e->getPlayer();
         $n = $p->getName();
         $e->setJoinMessage("§r§d+§r§a $n");
-        $p->setItems($p);
+        $this->setItems($p);
 
     }
 
+    public function onCraft(CraftItemEvent $e){
+        $e->setCancelled();
+    }
+
+
+    public function onDeath(PlayerDeathEvent $e){
+    $p = $e->getPlayer();
+    $name = strtolower($p->getName());
+        if ($p instanceof Player) {
+            $cause = $p->getLastDamageCause();
+            if ($cause instanceof EntityDamageByEntityEvent) {
+                $damager = $cause->getDamager();
+                if ($damager instanceof Player) {
+                    $this->setItems($p);
+                    $this->setItems($damager);
+                    $damager->getInventory()->addItem(Item::get(368, 0, 1));
+                    $damager->getInventory()->addItem(Item::get(262, 0, 1));
+
+                }
+            }
+        }
+    }
+
+
     public function setItems(Player $p){
 
+        //get items
+        $sword = Item::get(268, 0, 1);
+        $stick = Item::get(280, 0, 1);
+        $bow = Item::get(261, 0, 1);
+        $stone = Item::get(24, 0, 64);
+        $enderpearl = Item::get(368, 0, 1);
+        $arrow = Item::get(262, 0, 1);
+
+        //set sum shit
         $p->extinguish();
         $p->setScale(1);
         $p->setGamemode(2);
         $p->getInventory()->setSize(36);
         $p->getInventory()->clearAll();
         $p->getArmorInventory()->clearAll();
-        $p->getInventory()->setItems(Item::get(1, 0, 1), 0);
+
+        //set items
+        $p->getInventory()->setItem($sword, 0);
+        $p->getInventory()->setItem($stick, 1);
+        $p->getInventory()->setItem($bow, 3);
+        $p->getInventory()->setItem($enderpearl, 2);
+        $p->getInventory()->setItem($stone, 4);
+        $p->getInventory()->setItem($arrow, 7);
+
+        //enchants
+        $sharpness = Enchantment::get(9);
+        $sharpness->setLevel(1);
+
+        $prot = Enchantment::get(0);
+        $prot->setLevel(2);
+
+        $kb = Enchantment::get(12);
+        $kb->setLevel(1);
+
+        $punch = Enchantment::get(20);
+        $punch->setLevel(1);
+        //enchant items
+        $stick->addEnchantment($kb);
+        $sword->addEnchantment($sharpness);
+        $bow->addEnchantment($punch);
+
+        $p->getInventory()->setHelmet(Item::get(298)->addEnchantment($prot));
+        $p->getInventory()->setChestplate(Item::get(299)->addEnchantment($prot));
+        $p->getInventory()->setLeggings(Item::get(300)->addEnchantment($prot));
+        $p->getInventory()->setBoots(Item::get(301)->addEnchantment($prot));
+
     }
 
 }
