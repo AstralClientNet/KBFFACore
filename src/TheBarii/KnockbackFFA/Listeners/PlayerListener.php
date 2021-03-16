@@ -47,6 +47,15 @@ class PlayerListener extends Listener{
 
     }
 
+    public function onChat(PlayerChatEvent $e){
+
+        $p = $e->getPlayer();
+        $n = $p->getName();
+        $msg = $e->getMessage();
+        $e->setFormat("§6[$n]§r §7$msg");
+
+    }
+
     public function onCraft(CraftItemEvent $e){
         $e->setCancelled();
     }
