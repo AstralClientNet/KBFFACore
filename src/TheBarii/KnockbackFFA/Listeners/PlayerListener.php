@@ -96,6 +96,7 @@ class PlayerListener extends Listener{
         $stone = Item::get(24, 0, 64);
         $enderpearl = Item::get(368, 0, 1);
         $arrow = Item::get(262, 0, 1);
+        $pickaxe = Item::get(270, 0, 1);
 
         //set sum shit
         $p->extinguish();
@@ -112,6 +113,7 @@ class PlayerListener extends Listener{
         $p->getInventory()->setItem($enderpearl, 2);
         $p->getInventory()->setItem($stone, 4);
         $p->getInventory()->setItem($arrow, 7);
+        $p->getInventory()->setItem($pickaxe, 5);
 
         //enchants
         $sharpness = Enchantment::get(9);
@@ -123,13 +125,21 @@ class PlayerListener extends Listener{
         $kb = Enchantment::get(12);
         $kb->setLevel(1);
 
+        $eff = Enchantment::get(15);
+        $eff->setLevel(3);
+
         $punch = Enchantment::get(20);
         $punch->setLevel(1);
+
         //enchant items
+
         $stick->addEnchantment($kb);
         $sword->addEnchantment($sharpness);
         $bow->addEnchantment($punch);
+        $pickaxe->addEnchantment($eff);
 
+
+        //set armor inv
         $p->getInventory()->setHelmet(Item::get(298)->addEnchantment($prot));
         $p->getInventory()->setChestplate(Item::get(299)->addEnchantment($prot));
         $p->getInventory()->setLeggings(Item::get(300)->addEnchantment($prot));
