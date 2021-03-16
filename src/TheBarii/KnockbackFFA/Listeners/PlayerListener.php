@@ -60,6 +60,13 @@ class PlayerListener extends Listener{
         $e->setCancelled();
     }
 
+    public function onQuit(PlayerQuitEvent $e){
+
+        $p = $e->getPlayer();
+        $n = $p->getName();
+        $e->setQuitMessage("§r§c-§r§c $n");
+
+    }
 
     public function onDeath(PlayerDeathEvent $e){
     $p = $e->getPlayer();
