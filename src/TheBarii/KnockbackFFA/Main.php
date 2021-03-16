@@ -18,10 +18,24 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\mcpe\protocol\EventPacket;
 use pocketmine\network\mcpe\protocol\LevelEventPacket;
+use TheBarii\Listeners\PlayerListener;
+
 
 class Main extends PluginBase{
+    private static $instance;
 
+ public function onEnable():void{
 
-    
+     self::$instance=$this;
+
+     $this->getServer()->loadLevel("kbffa");
+
+ }
+
+public function setListeners(){
+    $map=$this->getServer()->getPluginManager();
+    $map->registerEvents(new PlayerListener($this), $this);
+}
+
 
 }
