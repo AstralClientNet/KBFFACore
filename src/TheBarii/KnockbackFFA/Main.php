@@ -30,11 +30,17 @@ use TheBarii\commands\WhisperCommand;
 class Main extends PluginBase{
     private static $instance;
 
+
+
  public function onEnable():void{
 
      self::$instance=$this;
 
      $this->getServer()->loadLevel("kbffa");
+     $this->disableCommands();
+     $this->setListeners();
+     $this->setCommands();
+
 
  }
 
@@ -85,6 +91,5 @@ public function setListeners(){
     $map->registerEvents(new BlockListener($this), $this);
 
   }
-
 
 }

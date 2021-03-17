@@ -47,7 +47,11 @@ class BlockListener extends Listener{
 
    public function onBreak(BlockBreakEvent $e){
 
-
+        $blockID = $e->getBlock()->getID();
+        if($blockID == 168 or $blockID == 209 or $blockID == 181 or $blockID == 182 or $blockID == 44) {
+               $e->setCancelled();
+               $e->getPlayer()->sendMessage("You cannot break this block!");
+        }
 
    }
 

@@ -46,6 +46,9 @@ class PlayerListener extends Listener{
         $p->sendMessage("§4§l─────────────────────────────\n§r§k§5l§dl §r§fWelcome to §bKnockback FFA!\n§7Blocks reset every twenty seconds after you place them.\n§r§71 §r§4kill §7will give you one extra §r§6arrow §r§7and an §r§bender pearl.\n§l§4─────────────────────────────\n§r§l§6Teaming is not allowed!");
         $this->setItems($p);
 
+
+
+
     }
 
     public function onChat(PlayerChatEvent $e){
