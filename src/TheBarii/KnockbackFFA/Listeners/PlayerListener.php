@@ -101,6 +101,13 @@ class PlayerListener extends Listener{
         }
     }
 
+    /**
+     * @priority LOWEST
+     */
+    public function onExhaust(PlayerExhaustEvent $event){
+        $event->setCancelled();
+    }
+
 
     public function setItems(Player $p){
 
