@@ -16,7 +16,6 @@ use pocketmine\math\Vector3;
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 use pocketmine\network\mcpe\protocol\DataPacket;
 use pocketmine\network\mcpe\protocol\MovePlayerPacket;
-use Ghezin\cp\duels\groups\{BotDuelGroup, DuelGroup};
 
 class CPlayer extends Player{
 
