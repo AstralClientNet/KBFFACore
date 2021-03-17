@@ -79,6 +79,34 @@ class PlayerListener extends Listener{
 
     }
 
+    public function disableCommands(){
+        $map=$this->getServer()->getCommandMap();
+        $map->unregister($map->getCommand("kill"));
+        $map->unregister($map->getCommand("me"));
+        $map->unregister($map->getCommand("op"));
+        $map->unregister($map->getCommand("deop"));
+        $map->unregister($map->getCommand("enchant"));
+        $map->unregister($map->getCommand("effect"));
+        $map->unregister($map->getCommand("defaultgamemode"));
+        $map->unregister($map->getCommand("difficulty"));
+        $map->unregister($map->getCommand("spawnpoint"));
+        $map->unregister($map->getCommand("setworldspawn"));
+        $map->unregister($map->getCommand("title"));
+        $map->unregister($map->getCommand("seed"));
+        $map->unregister($map->getCommand("particle"));
+        $map->unregister($map->getCommand("gamemode"));
+        $map->unregister($map->getCommand("tell"));
+        $map->unregister($map->getCommand("say"));
+        $map->unregister($map->getCommand("reload"));
+        $map->unregister($map->getCommand("ban"));
+        $map->unregister($map->getCommand("kick"));
+        $map->unregister($map->getCommand("ban-ip"));
+        $map->unregister($map->getCommand("summon"));
+        $map->unregister($map->getCommand("weather"));
+        $map->unregister($map->getCommand("pardon"));
+        $map->unregister($map->getCommand("pardon-ip"));
+    }
+
     public function onDeath(PlayerDeathEvent $e){
     $p = $e->getPlayer();
     $pn = strtolower($p->getName());
