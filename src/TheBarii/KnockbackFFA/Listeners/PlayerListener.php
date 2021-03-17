@@ -43,6 +43,7 @@ class PlayerListener extends Listener{
         $p = $e->getPlayer();
         $n = $p->getName();
         $e->setJoinMessage("§r§d+§r§a $n");
+        $p->sendMessage("§4§l─────────────────────────────\n§r§k§5l§dl §r§fWelcome to §bKnockback FFA!\n§7Blocks reset every twenty seconds after you place them.\n§r§71 §r§4kill §7will give you one extra §r§6arrow §r§7and an §r§bender pearl.\n§l§r─────────────────────────────");
         $this->setItems($p);
 
     }
@@ -52,7 +53,7 @@ class PlayerListener extends Listener{
         $p = $e->getPlayer();
         $n = $p->getName();
         $msg = $e->getMessage();
-        $e->setFormat("§6[$n]§r §7$msg");
+        $e->setFormat("§6[$n]§r - §7$msg");
 
     }
 
