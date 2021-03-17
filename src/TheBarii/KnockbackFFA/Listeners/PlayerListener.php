@@ -43,7 +43,7 @@ class PlayerListener extends Listener{
         $p = $e->getPlayer();
         $n = $p->getName();
         $e->setJoinMessage("§r§d+§r§a $n");
-        $p->sendMessage("§4§l─────────────────────────────\n§r§k§5l§dl §r§fWelcome to §bKnockback FFA!\n§7Blocks reset every twenty seconds after you place them.\n§r§71 §r§4kill §7will give you one extra §r§6arrow §r§7and an §r§bender pearl.\n§l§r─────────────────────────────");
+        $p->sendMessage("§4§l─────────────────────────────\n§r§k§5l§dl §r§fWelcome to §bKnockback FFA!\n§7Blocks reset every twenty seconds after you place them.\n§r§71 §r§4kill §7will give you one extra §r§6arrow §r§7and an §r§bender pearl.\n§l§4─────────────────────────────\n§r§l§6Teaming is not allowed!");
         $this->setItems($p);
 
     }
@@ -53,8 +53,18 @@ class PlayerListener extends Listener{
         $p = $e->getPlayer();
         $n = $p->getName();
         $msg = $e->getMessage();
-        $e->setFormat("§6[$n]§r - §7$msg");
+        if(!$n == "TheBarii") {
+            $e->setFormat("§5[§r§6 $n §d] §7§r$msg");
+        }elseif($n == "TheBarii"){
+            $e->setFormat("§4Owner §r§5[§r§6 $n §d] §7§r$msg");
+        }elseif($n == "Argued168"){
 
+            $e->setFormat("§4Administrator §r§5[§r§6 $n §d] §7§r$msg");
+        }elseif($n == "Mo8rty22"){
+
+            $e->setFormat("§4Owner §r§5[§r§6 $n §d] §7§r$msg");
+
+        }
     }
 
     public function onCraft(CraftItemEvent $e){
