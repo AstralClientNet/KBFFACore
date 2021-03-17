@@ -68,6 +68,8 @@ class Main extends PluginBase{
 
  public function setCommands(){
 
+
+     //TODO: Staff utils & commands
      $map=$this->getServer()->getCommandMap();
      $map->register("gm", new GamemodeCommand($this));
      $map->register("ping", new PingCommand($this));
@@ -83,4 +85,6 @@ public function setListeners(){
     $map->registerEvents(new BlockListener($this), $this);
 
   }
+
+
 }
