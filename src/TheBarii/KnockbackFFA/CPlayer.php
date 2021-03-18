@@ -20,6 +20,7 @@ use pocketmine\network\mcpe\protocol\MovePlayerPacket;
 class CPlayer extends Player{
 
     public $re=null;
+    public $tag=null;
 
     public function setRe($player){
         $re=$player;
@@ -34,6 +35,27 @@ class CPlayer extends Player{
     }
     public function getRe(){
         return Server::getInstance()->getPlayerExact($this->re);
+    }
+
+    public function setTagged($player){
+
+        $tag=$player;
+        $this->tag=($tag!=null ? $tag->getName():"");
+
+    }
+
+    public function hasTagged():bool{
+        if($this->re===null) return false;
+        $tag=$this->getTagged();
+        if($tag===null) return false;
+        $player=$this->getTagged();
+        return $player!==null;
+
+    }
+
+    public function getTagged(){
+
+        return Server::getInstance()->getPlayerExact($this->tag);
     }
 
 

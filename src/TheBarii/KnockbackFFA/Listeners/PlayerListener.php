@@ -122,21 +122,60 @@ class PlayerListener implements Listener{
                 $damager = $cause->getDamager();
                 if ($damager instanceof Player) {
                     $this->setItems($p);
-                    $finalhealth=round($damager->getHealth(), 1);
+                    $finalhealth = round($damager->getHealth(), 1);
                     $dn = $damager->getName();
-                    $damager->getInventory()->addItem(Item::get(368, 0, 1));
-                    $damager->getInventory()->addItem(Item::get(262, 0, 1));
-                    $messages=["quickied", "railed", "clapped", "killed", "smashed", "OwOed", "UwUed", "sent to the heavens"];
-                    $dm="§e$pn §7was ".$messages[array_rand($messages)]." by §c$dn §7[".$finalhealth." HP]";
-                    $e->setDeathMessage($dm);
+                    if ($dn == $pn) {
+                        $dm = "§c$pn died to the void.";
+                        $e->setDeathMessage($dm);
+
+                    } else {
+                        $damager->getInventory()->addItem(Item::get(368, 0, 1));
+                        $damager->getInventory()->addItem(Item::get(262, 0, 1));
+                        $messages = ["quickied", "railed", "clapped", "killed", "smashed", "OwOed", "UwUed", "sent to the heavens"];
+                        $dm = "§e$pn §7was " . $messages[array_rand($messages)] . " by §c$dn §7[" . $finalhealth . " HP]";
+                        $e->setDeathMessage($dm);
+                    }
                 }
             }
         }
     }
 
+    /**
+     * @priority HIGHEST
+     */
+    public function onMove(PlayerMoveEvent $e){
+
+        $p = $e->getPlayer();
+        $x = $p->getX();
+        $y = $p->getFloorY();
+        $z = $p->getZ();
+        if($y < 45){
+            $p->kill();
+
+            if(!$p->getTagged() === null){
+                $whoTagged = $p->getTagged();
+                $whoTagged->getInventory()->addItem(Item::get(368, 0, 1));
+                $whoTagged->getInventory()->addItem(Item::get(262, 0, 1));
+            }
+
+        }
+
+    }
+
     public function onRespawn(PlayerRespawnEvent $e){
         $p = $e->getPlayer();
         $this->setItems($p);
+    }
+
+    /**
+     * @priority HIGHEST
+     */
+    public function onHit(EntityDamageByEntityEvent $e){
+
+        $p = $e->getEntity();
+        $player = $e->getDamager() instanceof EntityDamageByEntityEvent;
+        $p->setTagged($player);
+
 
     }
 
