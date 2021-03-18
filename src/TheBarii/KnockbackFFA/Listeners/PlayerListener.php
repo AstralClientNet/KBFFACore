@@ -140,6 +140,17 @@ class PlayerListener implements Listener{
         $event->setCancelled();
     }
 
+    /**
+     * @priority LOWEST
+     */
+    public function onDamage(EntityDamageEvent $ev){
+        if($ev->getCause() === EntityDamageEvent::CAUSE_FALL){
+            $ev->setCancelled();
+
+        }
+        
+    }
+
 
     public function setItems(Player $p){
 
