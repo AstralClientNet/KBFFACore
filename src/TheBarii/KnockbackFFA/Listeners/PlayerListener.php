@@ -151,8 +151,7 @@ class PlayerListener implements Listener{
         $z = $p->getZ();
         if($y < 45){
             $p->kill();
-
-            if(!$p->getTagged() === null){
+            if($p->hasTagged()){
                 $whoTagged = $p->getTagged();
                 $whoTagged->getInventory()->addItem(Item::get(368, 0, 1));
                 $whoTagged->getInventory()->addItem(Item::get(262, 0, 1));
@@ -173,9 +172,10 @@ class PlayerListener implements Listener{
     public function onHit(EntityDamageByEntityEvent $e){
 
         $p = $e->getEntity();
-        $player = $e->getDamager() instanceof EntityDamageByEntityEvent;
-        $p->setTagged($player);
-
+        if($e->getDamager() instanceof Player) {
+            $player = $e->getDamager();
+            $p->setTagged($player);
+        }
 
     }
 
