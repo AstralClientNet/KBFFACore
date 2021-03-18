@@ -1,6 +1,6 @@
 <?php
 
-namespace TheBarii\Commands;
+namespace TheBarii\KnockbackFFA\commands;
 
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerQuitEvent;
@@ -14,6 +14,7 @@ use pocketmine\plugin\Plugin;
 use pocketmine\scheduler\ClosureTask;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
+use TheBarii\KnockbackFFA\Main;
 
 class PingCommand extends PluginCommand implements Listener{
 
@@ -21,7 +22,7 @@ class PingCommand extends PluginCommand implements Listener{
 	private $plugin;
 	private $networkSessions = [];
 	
-	public function __construct(KnockbackFFA $plugin){
+	public function __construct(Main $plugin){
 		parent::__construct("ping", $plugin);
 		$this->plugin=$plugin;
 		$this->setAliases(["ms"]);

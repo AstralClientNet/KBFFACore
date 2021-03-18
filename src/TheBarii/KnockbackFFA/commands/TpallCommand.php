@@ -2,19 +2,20 @@
 
 declare(strict_types=1);
 
-namespace TheBarii\Commands;
+namespace TheBarii\KnockbackFFA\commands;
 
 use pocketmine\Player;
 use pocketmine\command\PluginCommand;
 use pocketmine\command\CommandSender;
 use pocketmine\level\Position;
+use TheBarii\KnockbackFFA\Main;
 
 
 class TpallCommand extends PluginCommand{
 	
 	private $plugin;
 	
-	public function __construct(KnockbackFFA $plugin){
+	public function __construct(Main $plugin){
 		parent::__construct("tpall", $plugin);
 		$this->plugin=$plugin;
 		$this->setDescription("§bTeleport all players on the server to you");

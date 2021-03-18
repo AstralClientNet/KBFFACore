@@ -18,19 +18,19 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\mcpe\protocol\EventPacket;
 use pocketmine\network\mcpe\protocol\LevelEventPacket;
-use TheBarii\Listeners\PlayerListener;
-use TheBarii\Listeners\BlockListener;
-use TheBarii\commands\GamemodeCommand;
-use TheBarii\commands\PingCommand;
-use TheBarii\commands\ReplyCommand;
-use TheBarii\commands\TpallCommand;
-use TheBarii\commands\WhisperCommand;
+use TheBarii\KnockbackFFA\Listeners\PlayerListener;
+use TheBarii\KnockbackFFA\Listeners\BlockListener;
+use TheBarii\KnockbackFFA\commands\GamemodeCommand;
+use TheBarii\KnockbackFFA\commands\PingCommand;
+use TheBarii\KnockbackFFA\commands\ReplyCommand;
+use TheBarii\KnockbackFFA\commands\TpallCommand;
+use TheBarii\KnockbackFFA\commands\WhisperCommand;
 
 
 class Main extends PluginBase{
+
+
     private static $instance;
-
-
 
  public function onEnable():void{
 
@@ -63,13 +63,7 @@ class Main extends PluginBase{
         $map->unregister($map->getCommand("tell"));
         $map->unregister($map->getCommand("say"));
         $map->unregister($map->getCommand("reload"));
-        $map->unregister($map->getCommand("ban"));
-        $map->unregister($map->getCommand("kick"));
-        $map->unregister($map->getCommand("ban-ip"));
-        $map->unregister($map->getCommand("summon"));
-        $map->unregister($map->getCommand("weather"));
-        $map->unregister($map->getCommand("pardon"));
-        $map->unregister($map->getCommand("pardon-ip"));
+
     }
 
  public function setCommands(){
@@ -82,6 +76,7 @@ class Main extends PluginBase{
      $map->register("tpall", new TpallCommand($this));
      $map->register("reply", new ReplyCommand($this));
      $map->register("whisper", new WhisperCommand($this));
+     $this->getLogger()->info("--- Loaded Commands ---");
  }
 
 public function setListeners(){
@@ -89,7 +84,7 @@ public function setListeners(){
     $map=$this->getServer()->getPluginManager();
     $map->registerEvents(new PlayerListener($this), $this);
     $map->registerEvents(new BlockListener($this), $this);
-
+    $this->getLogger()->info("--- Loaded Listeners ---");
   }
 
 }

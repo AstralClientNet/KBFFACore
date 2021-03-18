@@ -1,18 +1,17 @@
 <?php
 
-namespace TheBarii\Commands;
+namespace TheBarii\KnockbackFFA\commands;
 
 use pocketmine\command\CommandSender;
 use pocketmine\command\PluginCommand;
 use pocketmine\Player;
-use Ghezin\cp\Core;
-use Ghezin\cp\Utils;
+use TheBarii\KnockbackFFA\Main;
 
 class GamemodeCommand extends PluginCommand{
 	
 	private $plugin;
 	
-	public function __construct(KnockbackFFA $plugin){
+	public function __construct(Main $plugin){
 		parent::__construct("gm", $plugin);
 		$this->plugin=$plugin;
 		$this->setPermission("kb.gm");

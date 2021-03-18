@@ -2,18 +2,19 @@
 
 declare(strict_types=1);
 
-namespace TheBarii\Commands;
+namespace TheBarii\KnockbackFFA\commands;
 
 use pocketmine\Player;
 use pocketmine\command\PluginCommand;
 use pocketmine\command\CommandSender;
-use TheBarii\CPlayer;
+use TheBarii\KnockbackFFA\CPlayer;
+use TheBarii\KnockbackFFA\Main;
 
 class ReplyCommand extends PluginCommand{
 	
 	private $plugin;
 	
-	public function __construct(KnockbackFFA $plugin){
+	public function __construct(Main $plugin){
 		parent::__construct("reply", $plugin);
 		$this->plugin=$plugin;
 		$this->setAliases(["r"]);

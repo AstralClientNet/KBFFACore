@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TheBarii;
+namespace TheBarii\KnockbackFFA;
 
 use pocketmine\Player;
 use pocketmine\Server;

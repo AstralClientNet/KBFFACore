@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TheBarii\Listeners;
+namespace TheBarii\KnockbackFFA\Listeners;
 
 use pocketmine\event\Listener;
 use pocketmine\Player;
@@ -33,10 +33,10 @@ use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityLevelChangeEvent;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\BlockPlaceEvent;
+use TheBarii\KnockbackFFA\Main;
 
-class BlockListener extends Listener{
-
-    public function __construct(KnockbackFFA $plugin){
+class BlockListener implements Listener{
+    public function __construct(Main $plugin){
         $this->plugin=$plugin;
     }
 

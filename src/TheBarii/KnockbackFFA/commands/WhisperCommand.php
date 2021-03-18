@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace TheBarii\Commands;
+namespace TheBarii\KnockbackFFA\commands;
 
 use pocketmine\Player;
 use pocketmine\command\PluginCommand;
 use pocketmine\command\CommandSender;
-use Ghezin\cp\Core;
-use Ghezin\cp\CPlayer;
+use TheBarii\KnockbackFFA\Main;
+use TheBarii\KnockbackFFA\CPlayer;
 
 class WhisperCommand extends PluginCommand{
 	
 	private $plugin;
 	
-	public function __construct(KnockbackFFA $plugin){
+	public function __construct(Main $plugin){
 		parent::__construct("whisper", $plugin);
 		$this->plugin=$plugin;
 		$this->setAliases(["w"]);
