@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TheBarii\KnockbackFFA\Listeners;
+namespace TheBarii\KnockbackFFA\Tasks;
 
 use pocketmine\event\Listener;
 use pocketmine\Player;
@@ -15,6 +15,9 @@ use pocketmine\network\mcpe\protocol\LevelEventPacket;
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 use pocketmine\network\mcpe\protocol\PlaySoundPacket;
 use pocketmine\event\player\PlayerCreationEvent;
+use pocketmine\inventory\ArmorInventory;
+use pocketmine\inventory\ArmorInventoryEventProcessor;
+use pocketmine\item\Armor;
 use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerExhaustEvent;
@@ -23,6 +26,7 @@ use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
+use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\event\player\PlayerCommandPreprocessEvent;
 use pocketmine\event\inventory\CraftItemEvent;
 use pocketmine\event\player\PlayerDropItemEvent;
@@ -31,26 +35,33 @@ use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityLevelChangeEvent;
-use pocketmine\event\block\BlockBreakEvent;
-use pocketmine\event\block\BlockPlaceEvent;
 use TheBarii\KnockbackFFA\Main;
+use TheBarii\KnockbackFFA\CPlayer;
+use pocketmine\item\enchantment\Enchantment;
+use pocketmine\event\block\BlockPlaceEvent;
+use pocketmine\scheduler\Task;
 
-class BlockListener implements Listener{
-    public function __construct(Main $plugin){
-        $this->plugin=$plugin;
+
+class PlayerListener implements Task
+{
+    public function __construct(Main $plugin)
+    {
+        $this->plugin = $plugin;
     }
 
-    public function onPlace(BlockPlaceEvent $e){
-    }
+    public function delete(){
 
-   public function onBreak(BlockBreakEvent $e){
 
-        $blockID = $e->getBlock()->getID();
-        if($blockID == 168 or $blockID == 209 or $blockID == 181 or $blockID == 182 or $blockID == 44) {
-               $e->setCancelled();
-               $e->getPlayer()->sendMessage("You cannot break this block!");
+        $lv = $this->getServer()->getLevelByName("kbstick1");
+        for ($x = -999; $x <= 1000; $x++){
+            for ($y = 1; $y <= 100; $y++){
+                for ($z = -999; $z <= 100; $z++){
+                    if ($lv->getBlockIdAt($x,$y,$z) == Item::SANDSTONE){ //no matter which sandstone you build
+                        $lv->setBlock(new Vector3($x,$y,$z), Block::get(0));
+                    }
+                }
+            }
         }
 
-   }
-
+    }
 }

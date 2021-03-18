@@ -44,10 +44,16 @@ class PlayerListener implements Listener{
         $this->plugin=$plugin;
     }
 
+
+    /**
+     * @priority HIGHEST
+     */
     function onCreation(PlayerCreationEvent $event){
         $event->setPlayerClass(CPlayer::class);
     }
-
+    /**
+     * @priority HIGHEST
+     */
     public function onJoin(PlayerJoinEvent $e){
 
         $p = $e->getPlayer();
@@ -60,6 +66,10 @@ class PlayerListener implements Listener{
 
 
     }
+
+    /**
+     * @priority LOW
+     */
 
     public function onChat(PlayerChatEvent $e){
 
@@ -79,7 +89,9 @@ class PlayerListener implements Listener{
 
         }
     }
-
+    /**
+     * @priority HIGHEST
+     */
     public function onCraft(CraftItemEvent $e){
         $e->setCancelled();
     }
@@ -93,6 +105,9 @@ class PlayerListener implements Listener{
     }
 
 
+    /**
+     * @priority HIGHEST
+     */
     public function onDeath(PlayerDeathEvent $e){
     $p = $e->getPlayer();
     $pn = strtolower($p->getName());
@@ -110,6 +125,9 @@ class PlayerListener implements Listener{
                     $messages=["quickied", "railed", "clapped", "killed", "smashed", "OwOed", "UwUed", "sent to the heavens"];
                     $dm="§e $pn §7was ".$messages[array_rand($messages)]." by §c $dn §7[".$finalhealth." HP]";
                     $e->setDeathMessage($dm);
+                }else{
+                    $e->setDeathMessage("§7$pn died to the void.");
+                    $this->setItems($p);
                 }
             }
         }
@@ -138,23 +156,6 @@ class PlayerListener implements Listener{
         $pant = Item::get(300);
         $boot = Item::get(301);
 
-        //set sum shit
-        $p->extinguish();
-        $p->setScale(1);
-        $p->setGamemode(2);
-        $p->getInventory()->setSize(36);
-        $p->getInventory()->clearAll();
-        $p->getArmorInventory()->clearAll();
-
-        //set items
-        $p->getInventory()->setItem(0, $sword);
-        $p->getInventory()->setItem(1, $stick);
-        $p->getInventory()->setItem(3, $bow);
-        $p->getInventory()->setItem(2, $enderpearl);
-        $p->getInventory()->setItem(4, $stone);
-        $p->getInventory()->setItem(7, $arrow);
-        $p->getInventory()->setItem(5, $pickaxe);
-
         //enchants
         $sharpness = Enchantment::getEnchantment(9);
 
@@ -176,6 +177,25 @@ class PlayerListener implements Listener{
         $chest->addEnchantment(new EnchantmentInstance($prot, 1));
         $boot->addEnchantment(new EnchantmentInstance($prot, 1));
         $pant->addEnchantment(new EnchantmentInstance($prot, 1));
+
+        //set sum shit
+        $p->extinguish();
+        $p->setScale(1);
+        $p->setGamemode(2);
+        $p->getInventory()->setSize(36);
+        $p->getInventory()->clearAll();
+        $p->getArmorInventory()->clearAll();
+
+        //set items
+        $p->getInventory()->setItem(0, $sword);
+        $p->getInventory()->setItem(1, $stick);
+        $p->getInventory()->setItem(3, $bow);
+        $p->getInventory()->setItem(2, $enderpearl);
+        $p->getInventory()->setItem(4, $stone);
+        $p->getInventory()->setItem(7, $arrow);
+        $p->getInventory()->setItem(5, $pickaxe);
+
+
 
 
         //set armor inv
