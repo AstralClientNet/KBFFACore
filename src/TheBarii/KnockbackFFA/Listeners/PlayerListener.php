@@ -87,6 +87,10 @@ class PlayerListener implements Listener{
 
             $e->setFormat("§4Owner §r§5[§r§6 $n §d] §7§r$msg");
 
+        }else{
+
+            $e->setFormat("§r§5[§r§6 $n §d] §7§r$msg");
+
         }
     }
     /**
@@ -110,27 +114,30 @@ class PlayerListener implements Listener{
      */
     public function onDeath(PlayerDeathEvent $e){
     $p = $e->getPlayer();
-    $pn = strtolower($p->getName());
+    $pn = $p->getName();
+    $this->setItems($p);
         if ($p instanceof Player) {
             $cause = $p->getLastDamageCause();
             if ($cause instanceof EntityDamageByEntityEvent) {
                 $damager = $cause->getDamager();
                 if ($damager instanceof Player) {
                     $this->setItems($p);
-                    $this->setItems($damager);
                     $finalhealth=round($damager->getHealth(), 1);
                     $dn = $damager->getName();
                     $damager->getInventory()->addItem(Item::get(368, 0, 1));
                     $damager->getInventory()->addItem(Item::get(262, 0, 1));
                     $messages=["quickied", "railed", "clapped", "killed", "smashed", "OwOed", "UwUed", "sent to the heavens"];
-                    $dm="§e $pn §7was ".$messages[array_rand($messages)]." by §c $dn §7[".$finalhealth." HP]";
+                    $dm="§e$pn §7was ".$messages[array_rand($messages)]." by §c$dn §7[".$finalhealth." HP]";
                     $e->setDeathMessage($dm);
-                }else{
-                    $e->setDeathMessage("§7$pn died to the void.");
-                    $this->setItems($p);
                 }
             }
         }
+    }
+
+    public function onRespawn(PlayerRespawnEvent $e){
+        $p = $e->getPlayer();
+        $this->setItems($p);
+
     }
 
     /**
