@@ -14,6 +14,7 @@ use pocketmine\math\Vector3;
 use pocketmine\network\mcpe\protocol\LevelEventPacket;
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 use pocketmine\network\mcpe\protocol\PlaySoundPacket;
+use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\player\PlayerCreationEvent;
 use pocketmine\inventory\ArmorInventory;
 use pocketmine\inventory\ArmorInventoryEventProcessor;
@@ -38,8 +39,11 @@ use pocketmine\event\entity\EntityLevelChangeEvent;
 use TheBarii\KnockbackFFA\Main;
 use TheBarii\KnockbackFFA\CPlayer;
 use pocketmine\item\enchantment\Enchantment;
+use pocketmine\event\entity\ProjectileHitEvent;
+use pocketmine\event\entity\ProjectileLaunchEvent;
 
 class PlayerListener implements Listener{
+
     public function __construct(Main $plugin){
         $this->plugin=$plugin;
     }
@@ -146,9 +150,7 @@ class PlayerListener implements Listener{
     public function onMove(PlayerMoveEvent $e){
 
         $p = $e->getPlayer();
-        $x = $p->getX();
         $y = $p->getFloorY();
-        $z = $p->getZ();
         if($y < 45){
             $p->kill();
             if($p->hasTagged()){
@@ -160,6 +162,47 @@ class PlayerListener implements Listener{
         }
 
     }
+
+    /**
+     * @priority HIGHEST
+     */
+    public function onArrowHit(ProjectileHitEvent $e){
+        $p = $e->getPlayer();
+        $y = $p->getFloorY();
+        if($y > 79) {
+            $e->setCancelled();
+
+        }
+
+    }
+
+    /**
+     * @priority HIGHEST
+     */
+    public function onShoot(ProjectileLaunchEvent $e){
+        $p = $e->getPlayer();
+        $y = $p->getFloorY();
+        if($y > 79) {
+            $e->setCancelled();
+
+        }
+
+    }
+
+    /**
+     * @priority HIGHEST
+     */
+    public function onPlace(BlockPlaceEvent $e){
+
+        $p = $e->getPlayer();
+        $y = $p->getFloorY();
+        if($y > 79){
+            $e->setCancelled();
+            $p->sendMessage("You cannot build above this limit!");
+        }
+
+    }
+
 
     public function onRespawn(PlayerRespawnEvent $e){
         $p = $e->getPlayer();
@@ -176,7 +219,10 @@ class PlayerListener implements Listener{
             $player = $e->getDamager();
             $p->setTagged($player);
         }
-
+        $y = $p->getFloorY();
+        if($y > 79) {
+            $e->setCancelled();
+        }
     }
 
     /**
@@ -207,7 +253,7 @@ class PlayerListener implements Listener{
         $stone = Item::get(24, 0, 64);
         $enderpearl = Item::get(368, 0, 1);
         $arrow = Item::get(262, 0, 1);
-        $pickaxe = Item::get(270, 0, 1);
+        $cob = Item::get(30, 0, 1);
         $helm = Item::get(298);
         $chest = Item::get(299);
         $pant = Item::get(300);
@@ -229,7 +275,6 @@ class PlayerListener implements Listener{
         $stick->addEnchantment(new EnchantmentInstance($kb, 1));
         $sword->addEnchantment(new EnchantmentInstance($sharpness, 1));
         $bow->addEnchantment(new EnchantmentInstance($punch, 1));
-        $pickaxe->addEnchantment(new EnchantmentInstance($eff, 3));
         $helm->addEnchantment(new EnchantmentInstance($prot, 1));
         $chest->addEnchantment(new EnchantmentInstance($prot, 1));
         $boot->addEnchantment(new EnchantmentInstance($prot, 1));
@@ -246,11 +291,11 @@ class PlayerListener implements Listener{
         //set items
         $p->getInventory()->setItem(0, $sword);
         $p->getInventory()->setItem(1, $stick);
-        $p->getInventory()->setItem(3, $bow);
+        $p->getInventory()->setItem(8, $bow);
         $p->getInventory()->setItem(2, $enderpearl);
-        $p->getInventory()->setItem(4, $stone);
-        $p->getInventory()->setItem(7, $arrow);
-        $p->getInventory()->setItem(5, $pickaxe);
+        $p->getInventory()->setItem(5, $stone);
+        $p->getInventory()->setItem(6, $arrow);
+        $p->getInventory()->setItem(4, $cob);
 
 
 
