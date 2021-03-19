@@ -169,7 +169,7 @@ class PlayerListener implements Listener{
      * @priority HIGHEST
      */
     public function onDrop(PlayerDropItemEvent $e){
-        $p = $e->getEntity();
+        $p = $e->getPlayer();
         $y = $p->getFloorY();
         if($y > 79) {
             $e->setCancelled();
