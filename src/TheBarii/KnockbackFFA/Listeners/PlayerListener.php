@@ -44,13 +44,12 @@ use pocketmine\event\entity\ProjectileLaunchEvent;
 use pocketmine\event\entity\EntityShootBowEvent;
 
 
+
 class PlayerListener implements Listener{
 
     public function __construct(Main $plugin){
         $this->plugin=$plugin;
     }
-
-
     /**
      * @priority HIGHEST
      */
@@ -116,6 +115,7 @@ class PlayerListener implements Listener{
     public function onDeath(PlayerDeathEvent $e){
     $p = $e->getPlayer();
     $pn = $p->getName();
+    $e->setDrops(array());
     $this->setItems($p);
         if ($p instanceof Player) {
             $cause = $p->getLastDamageCause();
@@ -165,7 +165,16 @@ class PlayerListener implements Listener{
             $e->setCancelled();
         }
     }
-
+    /**
+     * @priority HIGHEST
+     */
+    public function onDrop(PlayerDropItemEvent $e){
+        $p = $e->getEntity();
+        $y = $p->getFloorY();
+        if($y > 79) {
+            $e->setCancelled();
+        }
+    }
     /**
      * @priority HIGHEST
      */
