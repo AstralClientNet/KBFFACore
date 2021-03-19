@@ -65,12 +65,16 @@ class PlayerListener implements Listener{
         $p = $e->getPlayer();
         $n = $p->getName();
         $e->setJoinMessage("§r§d+§r§a $n");
-        $p->sendMessage("§4§l─────────────────────────────\n§r§k§5l§dl§r  §fWelcome to §bKnockback FFA!  §r§k§5l§dl§r\n§7Blocks reset every twenty seconds after you place them.\n§r§71 §r§4kill §7will give you one extra §r§6arrow §r§7and an §r§bender pearl.\n§l§4─────────────────────────────\n§r§l§6Teaming is not allowed!");
+        $p->sendMessage("§4§l─────────────────────────────\n§r§k§5l§dl§r  §fWelcome to §bKnockback FFA!  §r§k§5l§dl§r\n§7Blocks reset every twenty seconds after you place them.\n§r§71 §r§4kill §7will give you one extra §r§6arrow§7, a §rcobweb§7, §r§7and an §r§bender pearl.\n\n§7Discord: https://astralclient.net/discord/\n§l§4─────────────────────────────\n§r§l§6Teaming is not allowed!");
         $this->setItems($p);
 
 
+        $x = 244;
+        $y = 88;
+        $z = 182;
 
-
+        $level = $this->plugin->getServer()->getLevelByName("kbstick1");
+        $p->teleport(new Vector3($x, $y, $z, 0, 0, $level));
     }
 
     /**
