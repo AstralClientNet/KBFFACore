@@ -40,28 +40,27 @@ use TheBarii\KnockbackFFA\CPlayer;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\scheduler\Task;
+use pocketmine\block\Sandstone;
+use pocketmine\block\Block;
+use pocketmine\block\Air;
 
-
-class PlayerListener implements Task
+class BlockReset extends Task
 {
-    public function __construct(Main $plugin)
+    public $x;
+    public $y;
+    public $z;
+
+
+    public function __construct($block, $x, $y, $z)
     {
-        $this->plugin = $plugin;
+        $this->x = $x;
+        $this->y = $y;
+        $this->z = $z;
     }
 
-    public function delete(){
 
-
-        $lv = $this->getServer()->getLevelByName("kbstick1");
-        for ($x = -999; $x <= 1000; $x++){
-            for ($y = 1; $y <= 100; $y++){
-                for ($z = -999; $z <= 100; $z++){
-                    if ($lv->getBlockIdAt($x,$y,$z) == Item::SANDSTONE){ //no matter which sandstone you build
-                        $lv->setBlock(new Vector3($x,$y,$z), Block::get(0));
-                    }
-                }
-            }
-        }
-
+    public function onRun(int $tick){
+        $level = Server::getInstance()->getLevelByName("kbstick1");
+        $level->setBlock(new Vector3($this->x, $this->y, $this->z), new Air(), false);
     }
 }

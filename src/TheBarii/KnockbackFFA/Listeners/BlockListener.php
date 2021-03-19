@@ -34,23 +34,24 @@ use pocketmine\event\entity\EntityLevelChangeEvent;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\BlockPlaceEvent;
 use TheBarii\KnockbackFFA\Main;
+use TheBarii\KnockbackFFA\Tasks\BlockReset;
 
 class BlockListener implements Listener{
     public function __construct(Main $plugin){
         $this->plugin=$plugin;
     }
-
     public function onPlace(BlockPlaceEvent $e){
+        $block = $e->getBlock();
+        $x = $block->getX();
+        $y = $block->getY();
+        $z = $block->getZ();
+        $this->plugin->getScheduler()->scheduleDelayedTask(new BlockReset($block, $x, $y, $z), 350);
     }
-
    public function onBreak(BlockBreakEvent $e){
 
         $blockID = $e->getBlock()->getID();
         if($blockID == 168 or $blockID == 209 or $blockID == 181 or $blockID == 182 or $blockID == 44) {
                $e->setCancelled();
-               $e->getPlayer()->sendMessage("You cannot break this block!");
         }
-
-   }
-
+    }
 }

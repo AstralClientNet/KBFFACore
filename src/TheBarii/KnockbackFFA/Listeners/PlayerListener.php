@@ -41,6 +41,8 @@ use TheBarii\KnockbackFFA\CPlayer;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\event\entity\ProjectileHitEvent;
 use pocketmine\event\entity\ProjectileLaunchEvent;
+use pocketmine\event\entity\EntityShootBowEvent;
+
 
 class PlayerListener implements Listener{
 
@@ -63,7 +65,7 @@ class PlayerListener implements Listener{
         $p = $e->getPlayer();
         $n = $p->getName();
         $e->setJoinMessage("§r§d+§r§a $n");
-        $p->sendMessage("§4§l─────────────────────────────\n§r§k§5l§dl §r§fWelcome to §bKnockback FFA!\n§7Blocks reset every twenty seconds after you place them.\n§r§71 §r§4kill §7will give you one extra §r§6arrow §r§7and an §r§bender pearl.\n§l§4─────────────────────────────\n§r§l§6Teaming is not allowed!");
+        $p->sendMessage("§4§l─────────────────────────────\n§r§k§5l§dl§r  §fWelcome to §bKnockback FFA!  §r§k§5l§dl§r\n§7Blocks reset every twenty seconds after you place them.\n§r§71 §r§4kill §7will give you one extra §r§6arrow §r§7and an §r§bender pearl.\n§l§4─────────────────────────────\n§r§l§6Teaming is not allowed!");
         $this->setItems($p);
 
 
@@ -85,16 +87,11 @@ class PlayerListener implements Listener{
         }elseif($n == "TheBarii"){
             $e->setFormat("§4Owner §r§5[§r§6 $n §d] §7§r$msg");
         }elseif($n == "Argued168"){
-
             $e->setFormat("§4Administrator §r§5[§r§6 $n §d] §7§r$msg");
         }elseif($n == "Mo8rty22"){
-
             $e->setFormat("§4Owner §r§5[§r§6 $n §d] §7§r$msg");
-
         }else{
-
             $e->setFormat("§r§5[§r§6 $n §d] §7§r$msg");
-
         }
     }
     /**
@@ -103,16 +100,12 @@ class PlayerListener implements Listener{
     public function onCraft(CraftItemEvent $e){
         $e->setCancelled();
     }
-
     public function onQuit(PlayerQuitEvent $e){
 
         $p = $e->getPlayer();
         $n = $p->getName();
         $e->setQuitMessage("§r§c-§r§c $n");
-
     }
-
-
     /**
      * @priority HIGHEST
      */
@@ -143,12 +136,10 @@ class PlayerListener implements Listener{
             }
         }
     }
-
     /**
      * @priority HIGHEST
      */
     public function onMove(PlayerMoveEvent $e){
-
         $p = $e->getPlayer();
         $y = $p->getFloorY();
         if($y < 45){
@@ -158,62 +149,71 @@ class PlayerListener implements Listener{
                 $whoTagged->getInventory()->addItem(Item::get(368, 0, 1));
                 $whoTagged->getInventory()->addItem(Item::get(262, 0, 1));
             }
-
         }
-
     }
-
     /**
      * @priority HIGHEST
      */
     public function onArrowHit(ProjectileHitEvent $e){
+        $p = $e->getEntity();
+        $y = $p->getFloorY();
+        if($y > 79) {
+            $e->setCancelled();
+        }
+    }
+
+    /**
+     * @priority HIGHEST
+     */
+    public function onUse(PlayerInteractEvent $e){
         $p = $e->getPlayer();
         $y = $p->getFloorY();
         if($y > 79) {
             $e->setCancelled();
-
         }
-
     }
-
     /**
      * @priority HIGHEST
      */
     public function onShoot(ProjectileLaunchEvent $e){
-        $p = $e->getPlayer();
+        $p = $e->getEntity();
         $y = $p->getFloorY();
-        if($y > 79) {
+        if($y > 79){
             $e->setCancelled();
-
         }
-
     }
-
     /**
      * @priority HIGHEST
      */
+    public function onShoot2(EntityShootBowEvent $e){
+        $p = $e->getEntity();
+        $y = $p->getFloorY();
+        if($y > 79){
+            $e->setCancelled();
+        }
+    }
+    /**
+     * @priority HIGH
+     */
     public function onPlace(BlockPlaceEvent $e){
-
         $p = $e->getPlayer();
         $y = $p->getFloorY();
         if($y > 79){
             $e->setCancelled();
-            $p->sendMessage("You cannot build above this limit!");
         }
-
     }
 
-
+    /**
+     * @priority LOW
+     */
     public function onRespawn(PlayerRespawnEvent $e){
         $p = $e->getPlayer();
         $this->setItems($p);
     }
-
     /**
      * @priority HIGHEST
      */
     public function onHit(EntityDamageByEntityEvent $e){
-
         $p = $e->getEntity();
         if($e->getDamager() instanceof Player) {
             $player = $e->getDamager();
@@ -224,26 +224,20 @@ class PlayerListener implements Listener{
             $e->setCancelled();
         }
     }
-
     /**
      * @priority LOWEST
      */
     public function onExhaust(PlayerExhaustEvent $event){
         $event->setCancelled();
     }
-
     /**
      * @priority LOWEST
      */
     public function onDamage(EntityDamageEvent $ev){
         if($ev->getCause() === EntityDamageEvent::CAUSE_FALL){
             $ev->setCancelled();
-
         }
-
     }
-
-
     public function setItems(Player $p){
 
         //get items
