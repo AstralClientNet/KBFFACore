@@ -125,6 +125,7 @@ class PlayerListener implements Listener{
                     $this->setItems($p);
                     $finalhealth = round($damager->getHealth(), 1);
                     $dn = $damager->getName();
+                    $p->setTagged(null);
                     if ($dn == $pn) {
                         $dm = "§c$pn died to the void.";
                         $e->setDeathMessage($dm);
@@ -132,6 +133,7 @@ class PlayerListener implements Listener{
                     } else {
                         $damager->getInventory()->addItem(Item::get(368, 0, 1));
                         $damager->getInventory()->addItem(Item::get(262, 0, 1));
+                        $damager->getInventory()->addItem(Item::get(30, 0, 1));
                         $messages = ["quickied", "railed", "clapped", "killed", "smashed", "OwOed", "UwUed", "sent to the heavens"];
                         $dm = "§e$pn §7was " . $messages[array_rand($messages)] . " by §c$dn §7[" . $finalhealth . " HP]";
                         $e->setDeathMessage($dm);
@@ -153,16 +155,6 @@ class PlayerListener implements Listener{
                 $whoTagged->getInventory()->addItem(Item::get(368, 0, 1));
                 $whoTagged->getInventory()->addItem(Item::get(262, 0, 1));
             }
-        }
-    }
-    /**
-     * @priority HIGHEST
-     */
-    public function onArrowHit(ProjectileHitEvent $e){
-        $p = $e->getEntity();
-        $y = $p->getFloorY();
-        if($y > 79) {
-            $e->setCancelled();
         }
     }
     /**
@@ -290,8 +282,8 @@ class PlayerListener implements Listener{
         //set sum shit
         $p->extinguish();
         $p->setScale(1);
-        $p->setGamemode(2);
-        $p->getInventory()->setSize(36);
+        $p->setGamemode(0);
+        $p->getInventory()->setSize(10);
         $p->getInventory()->clearAll();
         $p->getArmorInventory()->clearAll();
 
