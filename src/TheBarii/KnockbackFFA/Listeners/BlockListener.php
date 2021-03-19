@@ -45,7 +45,7 @@ class BlockListener implements Listener{
         $x = $block->getX();
         $y = $block->getY();
         $z = $block->getZ();
-        $this->plugin->getScheduler()->scheduleDelayedTask(new BlockReset($block, $x, $y, $z), 350);
+        $this->plugin->getScheduler()->scheduleDelayedTask(new BlockReset($block, $x, $y, $z), 250);
     }
    public function onBreak(BlockBreakEvent $e){
 
