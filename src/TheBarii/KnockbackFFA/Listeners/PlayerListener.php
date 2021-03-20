@@ -214,6 +214,7 @@ class PlayerListener implements Listener{
     public function onRespawn(PlayerRespawnEvent $e){
         $p = $e->getPlayer();
         $this->setItems($p);
+        $p->setTagged(null);
     }
     /**
      * @priority HIGHEST
