@@ -16,11 +16,26 @@ use pocketmine\math\Vector3;
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 use pocketmine\network\mcpe\protocol\DataPacket;
 use pocketmine\network\mcpe\protocol\MovePlayerPacket;
+use TheBarii\KnockbackFFA\Main;
 
 class CPlayer extends Player{
 
     public $re=null;
     public $tag=null;
+    private $plugin;
+
+    public function __construct(SourceInterface $interface, $ip, $port)
+    {
+        parent::__construct($interface, $ip, $port);
+        $plugin = $this->getServer()->getPluginManager()->getPlugin("KnockbackFFA");
+        if ($plugin instanceof Main) {
+            $this->setPlugin($plugin);
+        }
+    }
+
+    public function setPlugin($plugin){
+        $this->plugin=$plugin;
+    }
 
     public function setRe($player){
         $re=$player;
@@ -55,9 +70,8 @@ class CPlayer extends Player{
 
     public function initializeLogin()
     {
-        $this->plugin->getDatabaseHandler()->essentialStatsAdd(Main::getPlayerName($this));
+        Main::getInstance()->getDatabaseHandler()->essentialStatsAdd(Main::getPlayerName($this));
     }
-
 
     public function getTagged(){
 

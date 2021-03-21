@@ -26,6 +26,8 @@ class ScoreboardHandler
 
     public function scoreboard($player, string $title ="Knockback FFA"): void
     {
+
+        foreach($this->plugin->getServer()->getOnlinePlayers() as $player)
             $ks =  $this->plugin->getDatabaseHandler()->getKillstreak($player->getName());
             $this->lineTitle($player, "  "."§bKnockback FFA ");
             $online = count($this->plugin->getServer()->getOnlinePlayers());

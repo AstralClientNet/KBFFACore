@@ -77,7 +77,7 @@ class PlayerListener implements Listener{
         $level = $this->plugin->getServer()->getLevelByName("kbstick1");
         $p->teleport(new Vector3($x, $y, $z, 0, 0, $level));
 
-            $this->plugin->getScoreboardHandler()->scoreboard($p);
+            $this->plugin->getScoreboardHandler()->scoreboard($this);
             $this->loadUpdatingFloatingTexts($p);
 
     }

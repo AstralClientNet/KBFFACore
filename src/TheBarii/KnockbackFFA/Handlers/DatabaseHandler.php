@@ -48,7 +48,7 @@ class DatabaseHandler{
 
     public function getKillstreak($player){
         $query=$this->plugin->main->query("SELECT killstreak FROM essentialstats WHERE player='".Main::getPlayerName($player)."';");
-        $result=$query->fetchArray(SQLITE3_ASSOC)["killstreak"];
+        $result=$query->fetchArray(SQLITE3_ASSOC);
         return (int) $result["killstreak"];
     }
 
