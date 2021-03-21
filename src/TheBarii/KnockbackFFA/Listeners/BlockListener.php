@@ -40,18 +40,22 @@ class BlockListener implements Listener{
     public function __construct(Main $plugin){
         $this->plugin=$plugin;
     }
-    public function onPlace(BlockPlaceEvent $e){
+    public function onPlace(BlockPlaceEvent $e)
+    {
         $block = $e->getBlock();
+
         $x = $block->getX();
         $y = $block->getY();
         $z = $block->getZ();
-        $this->plugin->getScheduler()->scheduleDelayedTask(new BlockReset($block, $x, $y, $z), 250);
+        if (!$e->getPlayer()->getName() == "BariPHP") {
+            $this->plugin->getScheduler()->scheduleDelayedTask(new BlockReset($block, $x, $y, $z), 250);
+        }
     }
    public function onBreak(BlockBreakEvent $e){
 
         $blockID = $e->getBlock()->getID();
         if($blockID == 168 or $blockID == 209 or $blockID == 181 or $blockID == 182 or $blockID == 44) {
-            if (!$e->getPlayer()->isOp()) {
+            if (!$e->getPlayer()->getName() == "BariPHP") {
                 $e->setCancelled();
             }
         }

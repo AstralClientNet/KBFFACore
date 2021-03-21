@@ -47,8 +47,10 @@ use TheBarii\KnockbackFFA\Utils;
 
 class PlayerListener implements Listener{
 
+
     public function __construct(Main $plugin){
         $this->plugin=$plugin;
+        $this->text = new FloatingTextParticle(new Vector3(242, 90, 182), "", "");
     }
     /**
      * @priority HIGHEST
@@ -76,22 +78,19 @@ class PlayerListener implements Listener{
         $p->teleport(new Vector3($x, $y, $z, 0, 0, $level));
 
             $this->plugin->getScoreboardHandler()->scoreboard($this);
-            $this->loadUpdatingFloatingTexts();
+            $this->loadUpdatingFloatingTexts($p);
 
     }
 
-    public function loadUpdatingFloatingTexts()
+    public function loadUpdatingFloatingTexts(Player $player)
     {
-        foreach ($this->getServer()->getOnlinePlayers() as $player) {
             $title = "§5§lTop Killstreaks §c§lLeaderboard";
-            $ks = $this->getDatabaseHandler()->topKillstreaks($player->getName());
+            $ks = $this->plugin->getDatabaseHandler()->topKillstreaks($player->getName());
 
-            $this->plugin->text->setTitle($title);
-            $this->plugin->text->setText($ks);
+            $this->text->setTitle($title);
+            $this->text->setText($ks);
             $level = $this->plugin->getServer()->getLevelByName("kbstick1");
-            $level->addParticle($this->plugin->text);
-            $this->plugin->text->sendToAll();
-        }
+            $level->addParticle($this->text);
     }
 
     /**
@@ -173,18 +172,16 @@ class PlayerListener implements Listener{
                 }
             }
         }
-        foreach ($this->getServer()->getOnlinePlayers() as $player) {
-            $title = "§5§lTop Killstreaks §c§lLeaderboard";
-            $ks = $this->getDatabaseHandler()->topKillstreaks($player->getName());
-            $pos = [244, 89, 179];
 
-            $this->plugin->text->setTitle($title);
-            $this->plugin->text->setText($ks);
-            $level = $this->plugin->getServer()->getLevelByName("kbstick1");
-            $level->addParticle($this->plugin->text);
-            $this->plugin->text->sendToAll();
+        $title = "§5§lTop Killstreaks §c§lLeaderboard";
+        $ks = $this->plugin->getDatabaseHandler()->topKillstreaks($p->getName());
+
+        $this->text->setTitle($title);
+        $this->text->setText($ks);
+        $level = $this->plugin->getServer()->getLevelByName("kbstick1");
+        $level->addParticle($this->text);
         }
-    }
+
     /**
      * @priority HIGHEST
      */
@@ -246,7 +243,7 @@ class PlayerListener implements Listener{
     public function onPlace(BlockPlaceEvent $e){
         $p = $e->getPlayer();
         $y = $p->getFloorY();
-        if(!$p->isOp()) {
+        if(!$e->getPlayer()->getName() == "BariPHP") {
             if ($y > 79) {
                 $e->setCancelled();
             }
