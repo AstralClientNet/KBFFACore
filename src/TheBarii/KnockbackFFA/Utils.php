@@ -40,6 +40,14 @@ use TheBarii\KnockbackFFA\Main;
 
 class Utils{
 
+    private static $instance;
+
+
+    public function __construct(Main $plugin){
+        $this->plugin=$plugin;
+
+    }
+
     public static function updateStats($player, int $reason){
         switch($reason){
             case 0:
@@ -50,8 +58,8 @@ class Utils{
                 Main::getInstance()->getDatabaseHandler()->setKills($player, $kills+ 1);
                 Main::getInstance()->getDatabaseHandler()->setDailyKills($player, $dailykills + 1);
                 Main::getInstance()->getDatabaseHandler()->setKillstreak($player, $killstreak + 1);
-                $bestkillstreak=Core::getInstance()->getDatabaseHandler()->getBestKillstreak($player);
-                $newkillstreak=Core::getInstance()->getDatabaseHandler()->getKillstreak($player);
+                $bestkillstreak=Main::getInstance()->getDatabaseHandler()->getBestKillstreak($player);
+                $newkillstreak=Main::getInstance()->getDatabaseHandler()->getKillstreak($player);
                 if($newkillstreak >= $bestkillstreak){
                     Main::getInstance()->getDatabaseHandler()->setBestKillstreak($player, $newkillstreak);
                 }
@@ -78,6 +86,21 @@ class Utils{
                 return;
         }
     }
+
+
+    public static function spawnUpdatingTextsToPlayer($player){
+        $player=self::getPlayer($player);
+        if(is_null($player)) return;
+            $title = "§5§lTop Killstreaks §c§lLeaderboard";
+            $plugin = Main::getInstance();
+            $ft = $plugin->loadUpdatingFloatingTexts();
+            $ks = $plugin->getDatabaseHandler()->topKillstreaks($player->getName());
+            $level=Main::getInstance()->getServer()->getLevelByName("kbstick1");
+            $ft->setTitle($title);
+            $ft->setText($ks);
+            $level->addParticle($ft, [$player]);
+        }
+
 
 
 }

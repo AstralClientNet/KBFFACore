@@ -35,6 +35,7 @@ class Main extends PluginBase{
     private static $instance;
     private static $scoreboardHandler;
     private static $databaseHandler;
+    public $text;
 
 
  public function onEnable():void{
@@ -49,20 +50,27 @@ class Main extends PluginBase{
      $this->loadUpdatingFloatingTexts();
      $this->db = @mkdir($this->getDataFolder()."kb.db");
      $this->main=new\SQLite3($this->getDataFolder()."kb.db");
-
+     $this->text = new FloatingTextParticle(new Vector3(77, 48, -892), "", "");
      $this->main->exec("CREATE TABLE IF NOT EXISTS essentialstats (player TEXT PRIMARY KEY, kills INT, deaths INT, kdr REAL, killstreak INT, bestkillstreak INT, coins INT, elo INT);");
  }
-    public function loadUpdatingFloatingTexts()
+
+        public function getUpdatingFloatingTexts(){
+
+
+
+         }
+    public function loadUpdatingFloatingTexts():void
     {
         foreach ($this->getServer()->getOnlinePlayers() as $player) {
             $title = "§5§lTop Killstreaks §c§lLeaderboard";
             $ks = $this->getDatabaseHandler()->topKillstreaks($player->getName());
             $pos = [244, 89, 179];
 
-            $ftext = new FloatingTextParticle(new Vector3 ($pos), $ks, $title);
+            $this->text->setTitle($title);
+            $this->text->setText($ks);
             $level = $this->getServer()->getLevelByName("kbstick1");
-            $level->addParticle($ftext);
-            $ftext->sendToAll();
+            $level->addParticle($this->text);
+            $this->text->sendToAll();
         }
     }
 

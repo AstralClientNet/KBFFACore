@@ -42,7 +42,7 @@ use pocketmine\item\enchantment\Enchantment;
 use pocketmine\event\entity\ProjectileHitEntityEvent;
 use pocketmine\event\entity\ProjectileLaunchEvent;
 use pocketmine\event\entity\EntityShootBowEvent;
-
+use TheBarii\KnockbackFFA\Utils;
 
 
 class PlayerListener implements Listener{
