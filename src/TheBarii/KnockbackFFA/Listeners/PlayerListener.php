@@ -173,6 +173,18 @@ class PlayerListener implements Listener{
                 }
             }
         }
+
+        foreach ($this->getServer()->getOnlinePlayers() as $player) {
+            $title = "§5§lTop Killstreaks §c§lLeaderboard";
+            $ks = $this->getDatabaseHandler()->topKillstreaks($player->getName());
+            $pos = [244, 89, 179];
+
+            $this->plugin->text->setTitle($title);
+            $this->plugin->text->setText($ks);
+            $level = $this->plugin->getServer()->getLevelByName("kbstick1");
+            $level->addParticle($this->plugin->text);
+            $this->plugin->text->sendToAll();
+        }
     }
     /**
      * @priority HIGHEST
