@@ -1,5 +1,5 @@
 name: KnockbackFFA
-main: TheBarii\KnockbackFFA\Main
-API: 3.0.0
-version: 1.0
+version: 3.0.0
+api: 3.0.0
 author: TheBarii
+main: TheBarii\KnockbackFFA\Main
