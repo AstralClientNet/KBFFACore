@@ -148,6 +148,7 @@ class PlayerListener implements Listener{
     $p = $e->getPlayer();
     $pn = $p->getName();
     $e->setDrops(array());
+
         if ($p instanceof Player) {
             $cause = $p->getLastDamageCause();
             if ($cause instanceof EntityDamageByEntityEvent) {
@@ -165,6 +166,8 @@ class PlayerListener implements Listener{
                         $damager->getInventory()->addItem(Item::get(368, 0, 1));
                         $damager->getInventory()->addItem(Item::get(262, 0, 1));
                         $damager->getInventory()->addItem(Item::get(30, 0, 1));
+                        if($damager instanceof CPlayer) Utils::updateStats($damager, 0);
+                        if($p instanceof CPlayer) Utils::updateStats($p, 1);
                         $messages = ["quickied", "railed", "clapped", "killed", "smashed", "OwOed", "UwUed", "sent to the heavens"];
                         $dm = "§e$pn §7was " . $messages[array_rand($messages)] . " by §c$dn §7[" . $finalhealth . " HP]";
                         $e->setDeathMessage($dm);
