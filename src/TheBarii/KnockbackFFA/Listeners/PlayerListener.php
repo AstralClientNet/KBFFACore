@@ -82,14 +82,15 @@ class PlayerListener implements Listener{
 
     public function loadUpdatingFloatingTexts()
     {
-        foreach ($this->plugin->getServer()->getOnlinePlayers() as $player) {
+        foreach ($this->getServer()->getOnlinePlayers() as $player) {
             $title = "§5§lTop Killstreaks §c§lLeaderboard";
-            $ks = $this->plugin->getDatabaseHandler()->topKillstreaks($player->getName());
-            $pos = [244, 88, 179];
+            $ks = $this->getDatabaseHandler()->topKillstreaks($player->getName());
 
-            $ftext = new FloatingTextParticle(new Vector3 (244, 89, 179), $ks, $title);
+            $this->plugin->text->setTitle($title);
+            $this->plugin->text->setText($ks);
             $level = $this->plugin->getServer()->getLevelByName("kbstick1");
-            $level->addParticle($ftext);
+            $level->addParticle($this->plugin->text);
+            $this->plugin->text->sendToAll();
         }
     }
 
@@ -148,7 +149,6 @@ class PlayerListener implements Listener{
     $p = $e->getPlayer();
     $pn = $p->getName();
     $e->setDrops(array());
-    $this->setItems($p);
         if ($p instanceof Player) {
             $cause = $p->getLastDamageCause();
             if ($cause instanceof EntityDamageByEntityEvent) {
@@ -162,7 +162,7 @@ class PlayerListener implements Listener{
                         $dm = "§c$pn died to the void.";
                         $e->setDeathMessage($dm);
 
-                    } else {
+                    }else {
                         $damager->getInventory()->addItem(Item::get(368, 0, 1));
                         $damager->getInventory()->addItem(Item::get(262, 0, 1));
                         $damager->getInventory()->addItem(Item::get(30, 0, 1));
@@ -173,7 +173,6 @@ class PlayerListener implements Listener{
                 }
             }
         }
-
         foreach ($this->getServer()->getOnlinePlayers() as $player) {
             $title = "§5§lTop Killstreaks §c§lLeaderboard";
             $ks = $this->getDatabaseHandler()->topKillstreaks($player->getName());

@@ -64,7 +64,6 @@ class Main extends PluginBase{
         foreach ($this->getServer()->getOnlinePlayers() as $player) {
             $title = "§5§lTop Killstreaks §c§lLeaderboard";
             $ks = $this->getDatabaseHandler()->topKillstreaks($player->getName());
-            $pos = [244, 89, 179];
 
             $this->text->setTitle($title);
             $this->text->setText($ks);
