@@ -29,6 +29,7 @@ use TheBarii\KnockbackFFA\Handlers\DatabaseHandler;
 use TheBarii\KnockbackFFA\Handlers\ScoreboardHandler;
 
 
+
 class Main extends PluginBase{
 
 
@@ -61,7 +62,7 @@ class Main extends PluginBase{
      $this->main->exec("CREATE TABLE IF NOT EXISTS temporaryranks (player TEXT PRIMARY KEY, temprank TEXT, duration INT, oldrank TEXT);");
      $this->main->exec("CREATE TABLE IF NOT EXISTS voteaccess (player TEXT PRIMARY KEY, bool TEXT, duration INT);");
      $this->main->exec("CREATE TABLE IF NOT EXISTS levels (player TEXT PRIMARY KEY, level INT, neededxp INT, currentxp INT, totalxp INT);");
-     
+
  }
 
         public function getUpdatingFloatingTexts(){

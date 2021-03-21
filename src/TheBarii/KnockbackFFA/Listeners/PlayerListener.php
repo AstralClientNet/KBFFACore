@@ -77,9 +77,19 @@ class PlayerListener implements Listener{
         $level = $this->plugin->getServer()->getLevelByName("kbstick1");
         $p->teleport(new Vector3($x, $y, $z, 0, 0, $level));
 
-            $this->plugin->getScoreboardHandler()->scoreboard($this);
+            $this->plugin->getScoreboardHandler()->scoreboard($p);
             $this->loadUpdatingFloatingTexts($p);
 
+    }
+
+    public function onPreLogin(PlayerPreLoginEvent $event)
+    {
+        $player = $event->getPlayer();
+        if ($player instanceof CPlayer) {
+            $player->initializeLogin();
+        }else{
+            $this->plugin->getDatabaseHandler()->essentialStatsAdd(Main::getPlayerName($player));
+        }
     }
 
     public function loadUpdatingFloatingTexts(Player $player)

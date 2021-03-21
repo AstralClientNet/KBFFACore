@@ -53,6 +53,12 @@ class CPlayer extends Player{
 
     }
 
+    public function initializeLogin()
+    {
+        $this->plugin->getDatabaseHandler()->essentialStatsAdd(Main::getPlayerName($this));
+    }
+
+
     public function getTagged(){
 
         return Server::getInstance()->getPlayerExact($this->tag);
