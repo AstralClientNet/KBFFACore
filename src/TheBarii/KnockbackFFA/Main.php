@@ -25,12 +25,17 @@ use TheBarii\KnockbackFFA\commands\PingCommand;
 use TheBarii\KnockbackFFA\commands\ReplyCommand;
 use TheBarii\KnockbackFFA\commands\TpallCommand;
 use TheBarii\KnockbackFFA\commands\WhisperCommand;
+use TheBarii\KnockbackFFA\Handlers\DatabaseHandler;
+use TheBarii\KnockbackFFA\Handlers\ScoreboardHandler;
 
 
 class Main extends PluginBase{
 
 
     private static $instance;
+    private static $scoreboardHandler;
+    private static $databaseHandler;
+
 
  public function onEnable():void{
 
@@ -40,11 +45,78 @@ class Main extends PluginBase{
      $this->disableCommands();
      $this->setListeners();
      $this->setCommands();
+     $this->setHandlers();
+     $this->loadUpdatingFloatingTexts();
+     $this->db = @mkdir($this->getDataFolder()."kb.db");
+     $this->main=new\SQLite3($this->getDataFolder()."kb.db");
 
-
+     $this->main->exec("CREATE TABLE IF NOT EXISTS essentialstats (player TEXT PRIMARY KEY, kills INT, deaths INT, kdr REAL, killstreak INT, bestkillstreak INT, coins INT, elo INT);");
  }
+    public function loadUpdatingFloatingTexts()
+    {
+        foreach ($this->getServer()->getOnlinePlayers() as $player) {
+            $title = "§5§lTop Killstreaks §c§lLeaderboard";
+            $ks = $this->getDatabaseHandler()->topKillstreaks($player->getName());
+            $pos = [244, 89, 179];
 
-    public function disableCommands(){
+            $ftext = new FloatingTextParticle(new Vector3 ($pos), $ks, $title);
+            $level = $this->getServer()->getLevelByName("kbstick1");
+            $level->addParticle($ftext);
+            $ftext->sendToAll();
+        }
+    }
+
+    public static function getInstance():Main{
+        return self::$instance;
+    }
+
+    public static function getDatabaseHandler():DatabaseHandler{
+        return self::$databaseHandler;
+    }
+
+
+    public static function getScoreboardHandler():ScoreboardHandler{
+    return self::$scoreboardHandler;
+    }
+
+
+    public function replaceProcess(Player $player, string $string):string{
+        $string=str_replace("{topkillstreaks}", $this->getDatabaseHandler()->topKillstreaks($player->getName()), $string);
+        return $string;
+    }
+
+    public static function isPlayer($player):bool{
+        return !is_null(self::getPlayer($player));
+    }
+    public static function getPlayer($info){
+        $result=null;
+        $player=self::getPlayerName($info);
+        if($player===null){
+            return $result;
+            return;
+        }
+        $player=Server::getInstance()->getPlayer($player);
+        if($player instanceof Player){
+            $result=$player;
+        }
+        return $result;
+    }
+
+
+public static function getPlayerName($player){
+    $result=null;
+    if(isset($player) and !is_null($player)){
+        if($player instanceof Player){
+            $result=$player->getName();
+        }elseif(is_string($player)){
+            $result=$player;
+        }
+    }
+    return $result;
+}
+
+
+public function disableCommands(){
         $map=$this->getServer()->getCommandMap();
         $map->unregister($map->getCommand("kill"));
         $map->unregister($map->getCommand("me"));
@@ -86,5 +158,12 @@ public function setListeners(){
     $map->registerEvents(new BlockListener($this), $this);
     $this->getLogger()->info("--- Loaded Listeners ---");
   }
+
+    public function setHandlers()
+    {
+        self::$databaseHandler=new DatabaseHandler();
+        self::$scoreboardHandler=new ScoreboardHandler($this);
+    }
+
 
 }

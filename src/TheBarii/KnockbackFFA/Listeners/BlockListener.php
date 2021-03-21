@@ -51,7 +51,9 @@ class BlockListener implements Listener{
 
         $blockID = $e->getBlock()->getID();
         if($blockID == 168 or $blockID == 209 or $blockID == 181 or $blockID == 182 or $blockID == 44) {
-               $e->setCancelled();
+            if (!$e->getPlayer()->isOp()) {
+                $e->setCancelled();
+            }
         }
     }
 }

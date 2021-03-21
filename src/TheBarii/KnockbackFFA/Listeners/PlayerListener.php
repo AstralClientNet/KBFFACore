@@ -7,7 +7,7 @@ namespace TheBarii\KnockbackFFA\Listeners;
 use pocketmine\event\Listener;
 use pocketmine\Player;
 use pocketmine\Server;
-
+use pocketmine\level\particle\FloatingTextParticle;
 use pocketmine\item\Item;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\math\Vector3;
@@ -39,7 +39,7 @@ use pocketmine\event\entity\EntityLevelChangeEvent;
 use TheBarii\KnockbackFFA\Main;
 use TheBarii\KnockbackFFA\CPlayer;
 use pocketmine\item\enchantment\Enchantment;
-use pocketmine\event\entity\ProjectileHitEvent;
+use pocketmine\event\entity\ProjectileHitEntityEvent;
 use pocketmine\event\entity\ProjectileLaunchEvent;
 use pocketmine\event\entity\EntityShootBowEvent;
 
@@ -74,6 +74,23 @@ class PlayerListener implements Listener{
 
         $level = $this->plugin->getServer()->getLevelByName("kbstick1");
         $p->teleport(new Vector3($x, $y, $z, 0, 0, $level));
+
+            $this->plugin->getScoreboardHandler()->scoreboard($this);
+            $this->loadUpdatingFloatingTexts();
+
+    }
+
+    public function loadUpdatingFloatingTexts()
+    {
+        foreach ($this->plugin->getServer()->getOnlinePlayers() as $player) {
+            $title = "§5§lTop Killstreaks §c§lLeaderboard";
+            $ks = $this->plugin->getDatabaseHandler()->topKillstreaks($player->getName());
+            $pos = [244, 88, 179];
+
+            $ftext = new FloatingTextParticle(new Vector3 (244, 89, 179), $ks, $title);
+            $level = $this->plugin->getServer()->getLevelByName("kbstick1");
+            $level->addParticle($ftext);
+        }
     }
 
     /**
@@ -108,6 +125,21 @@ class PlayerListener implements Listener{
         $p = $e->getPlayer();
         $n = $p->getName();
         $e->setQuitMessage("§r§c-§r§c $n");
+    }
+
+    /**
+     * @priority HIGHEST
+     */
+    public function onArrowHitEntity(ProjectileHitEntityEvent $e){
+
+        $p = $e->getEntity();
+        $d = $e->getDamager();
+
+        $y = $p->getFloorY();
+        if($y > 79){
+
+            $e->setCancelled();
+        }
     }
     /**
      * @priority HIGHEST
@@ -203,8 +235,10 @@ class PlayerListener implements Listener{
     public function onPlace(BlockPlaceEvent $e){
         $p = $e->getPlayer();
         $y = $p->getFloorY();
-        if($y > 79){
-            $e->setCancelled();
+        if(!$p->isOp()) {
+            if ($y > 79) {
+                $e->setCancelled();
+            }
         }
     }
 
@@ -284,6 +318,7 @@ class PlayerListener implements Listener{
         $p->extinguish();
         $p->setScale(1);
         $p->setGamemode(0);
+        $p->setMaxHealth(20);
         $p->getInventory()->setSize(10);
         $p->getInventory()->clearAll();
         $p->getArmorInventory()->clearAll();
