@@ -23,6 +23,35 @@ class DatabaseHandler{
         return (int) $result["bestkillstreak"];
     }
 
+    public function getDeaths($player){
+        $query=$this->plugin->main->query("SELECT deaths FROM essentialstats WHERE player='".Utils::getPlayerName($player)."';");
+        $result=$query->fetchArray(SQLITE3_ASSOC);
+        return (int) $result["deaths"];
+    }
+
+    public function essentialStatsAdd($player){
+        $check=$this->plugin->main->query("SELECT player FROM essentialstats WHERE player='".Main::getPlayerName($player)."';");
+        $result=$check->fetchArray(SQLITE3_ASSOC);
+        if(empty($result)){
+            $query=$this->plugin->main->prepare("INSERT OR REPLACE INTO essentialstats (player, kills, deaths, kdr, killstreak, bestkillstreak, coins, elo) VALUES (:player, :kills, :deaths, :kdr, :killstreak, :bestkillstreak, :coins, :elo);");
+            $query->bindValue(":player", $player);
+            $query->bindValue(":kills", 0);
+            $query->bindValue(":deaths", 0);
+            $query->bindValue(":kdr", 0);
+            $query->bindValue(":killstreak", 0);
+            $query->bindValue(":bestkillstreak", 0);
+            $query->bindValue(":coins", 0);
+            $query->bindValue(":elo", 0);
+            $query->execute();
+        }
+    }
+
+    public function getKills($player){
+        $query=$this->plugin->main->query("SELECT kills FROM essentialstats WHERE player='".Utils::getPlayerName($player)."';");
+        $result=$query->fetchArray(SQLITE3_ASSOC);
+        return (int) $result["kills"];
+    }
+
     public function topKillstreaks(string $viewer){
         $query=$this->plugin->main->query("SELECT * FROM essentialstats ORDER BY bestkillstreak DESC LIMIT 10;");
         $message="";

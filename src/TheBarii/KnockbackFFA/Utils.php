@@ -40,7 +40,44 @@ use TheBarii\KnockbackFFA\Main;
 
 class Utils{
 
-    
+    public static function updateStats($player, int $reason){
+        switch($reason){
+            case 0:
+                $oplayer=self::getPlayer($player);
+                $kills=Main::getInstance()->getDatabaseHandler()->getKills($player);
+                $dailykills=Main::getInstance()->getDatabaseHandler()->getDailyKills($player);
+                $killstreak=Main::getInstance()->getDatabaseHandler()->getKillstreak($player);
+                Main::getInstance()->getDatabaseHandler()->setKills($player, $kills+ 1);
+                Main::getInstance()->getDatabaseHandler()->setDailyKills($player, $dailykills + 1);
+                Main::getInstance()->getDatabaseHandler()->setKillstreak($player, $killstreak + 1);
+                $bestkillstreak=Core::getInstance()->getDatabaseHandler()->getBestKillstreak($player);
+                $newkillstreak=Core::getInstance()->getDatabaseHandler()->getKillstreak($player);
+                if($newkillstreak >= $bestkillstreak){
+                    Main::getInstance()->getDatabaseHandler()->setBestKillstreak($player, $newkillstreak);
+                }
+                if(!is_null($oplayer)) $oplayer->sendMessage("§aYou are on a killstreak of ".$newkillstreak."!");
+                break;
+            case 1:
+                $oplayer=self::getPlayer($player);
+                $deaths=Main::getInstance()->getDatabaseHandler()->getDeaths($player);
+                $dailydeaths=Main::getInstance()->getDatabaseHandler()->getDailyDeaths($player);
+                $killstreak=Main::getInstance()->getDatabaseHandler()->getKillstreak($player);
+                Main::getInstance()->getDatabaseHandler()->setDeaths($player, $deaths + 1);
+                Main::getInstance()->getDatabaseHandler()->setDailyDeaths($player, $dailydeaths + 1);
+                Main::getInstance()->getDatabaseHandler()->setKillstreak($player, 0);
+                if(!is_null($oplayer) and $killstreak > 0) $oplayer->sendMessage("§cYou lost your killstreak of ".$killstreak."!");
+                break;
+            case 2:
+                $deaths=Core::getInstance()->getDatabaseHandler()->getDeaths($player);
+                $dailydeaths=Core::getInstance()->getDatabaseHandler()->getDailyDeaths($player);
+                Main::getInstance()->getDatabaseHandler()->setDeaths($player, $deaths + 1);
+                Main::getInstance()->getDatabaseHandler()->setDailyDeaths($player, $dailydeaths + 1);
+                Main::getInstance()->getDatabaseHandler()->setKillstreak($player, 0);
+                break;
+            default:
+                return;
+        }
+    }
 
 
 }
