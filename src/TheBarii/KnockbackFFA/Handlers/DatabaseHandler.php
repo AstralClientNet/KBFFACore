@@ -24,7 +24,7 @@ class DatabaseHandler{
     }
 
     public function getDeaths($player){
-        $query=$this->plugin->main->query("SELECT deaths FROM essentialstats WHERE player='".Utils::getPlayerName($player)."';");
+        $query=$this->plugin->main->query("SELECT deaths FROM essentialstats WHERE player='".Main::getPlayerName($player)."';");
         $result=$query->fetchArray(SQLITE3_ASSOC);
         return (int) $result["deaths"];
     }
@@ -44,6 +44,12 @@ class DatabaseHandler{
             $query->bindValue(":elo", 0);
             $query->execute();
         }
+    }
+
+    public function getKillstreak($player){
+        $query=$this->plugin->main->query("SELECT killstreak FROM essentialstats WHERE player='".Main::getPlayerName($player)."';");
+        $result=$query->fetchArray(SQLITE3_ASSOC);
+        return (int) $result["killstreak"];
     }
 
     public function getKills($player){
