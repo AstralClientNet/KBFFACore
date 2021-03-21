@@ -53,7 +53,7 @@ class DatabaseHandler{
     }
 
     public function getKills($player){
-        $query=$this->plugin->main->query("SELECT kills FROM essentialstats WHERE player='".Utils::getPlayerName($player)."';");
+        $query=$this->plugin->main->query("SELECT kills FROM essentialstats WHERE player='".Main::getPlayerName($player)."';");
         $result=$query->fetchArray(SQLITE3_ASSOC);
         return (int) $result["kills"];
     }
