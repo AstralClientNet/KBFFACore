@@ -14,7 +14,7 @@ use TheBarii\KnockbackFFA\Main;
 
 class ScoreboardHandler
 {
-
+    // t
     private $plugin;
     private $main=[];
 
