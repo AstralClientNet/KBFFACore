@@ -206,10 +206,10 @@ class PlayerListener implements Listener{
         $level->addParticle($this->text);
 
 
-                $title = "§5§lTop Kills §c§lLeaderboard";
+                $title2 = "§5§lTop Kills §c§lLeaderboard";
                 $k = $this->plugin->getDatabaseHandler()->topKills($p->getName());
 
-                $this->text2->setTitle($title);
+                $this->text2->setTitle($title2);
                 $this->text2->setText($k);
                 $level = $this->plugin->getServer()->getLevelByName("kbstick1");
                 $level->addParticle($this->text2);
