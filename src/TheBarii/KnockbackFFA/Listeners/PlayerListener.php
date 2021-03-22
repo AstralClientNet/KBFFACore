@@ -103,7 +103,7 @@ class PlayerListener implements Listener{
             $this->text->setText($ks);
             $level = $this->plugin->getServer()->getLevelByName("kbstick1");
             $level->addParticle($this->text);
-    }
+    }//
 
     public function loadUpdatingFloatingTexts2(Player $player): void
     {
