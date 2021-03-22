@@ -170,9 +170,7 @@ class PlayerListener implements Listener{
                         $e->setDeathMessage($dm);
                     }
                     if(Main::getInstance()->getDatabaseHandler()->getKillstreak($damager) == 1){
-
                         $this->plugin->getServer()->broadcastMessage("§c".$damager->getName()." §7just got a killstreak of §6".Main::getInstance()->getDatabaseHandler()->getKillstreak($damager)."!");
-
                     }
 
                 }
@@ -225,6 +223,13 @@ class PlayerListener implements Listener{
         if($y < 45){
             $p->kill();
             if($p instanceof CPlayer) Utils::updateStats($p, 1);
+            $title = "§5§lTop Killstreaks §c§lLeaderboard";
+            $ks = $this->plugin->getDatabaseHandler()->topKillstreaks($p->getName());
+
+            $this->text->setTitle($title);
+            $this->text->setText($ks);
+            $level = $this->plugin->getServer()->getLevelByName("kbstick1");
+            $level->addParticle($this->text);
             if($p->hasTagged()){
                 $whoTagged = $p->getTagged();
                 $whoTagged->getInventory()->addItem(Item::get(368, 0, 1));
