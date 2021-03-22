@@ -47,17 +47,13 @@ class BlockListener implements Listener{
         $x = $block->getX();
         $y = $block->getY();
         $z = $block->getZ();
-        if (!$e->getPlayer()->getName() == "BariPHP") {
-            $this->plugin->getScheduler()->scheduleDelayedTask(new BlockReset($block, $x, $y, $z), 250);
-        }
+        $this->plugin->getScheduler()->scheduleDelayedTask(new BlockReset($block, $x, $y, $z), 250);
     }
    public function onBreak(BlockBreakEvent $e){
 
         $blockID = $e->getBlock()->getID();
         if($blockID == 168 or $blockID == 209 or $blockID == 181 or $blockID == 182 or $blockID == 44) {
-            if (!$e->getPlayer()->getName() == "BariPHP") {
                 $e->setCancelled();
-            }
         }
     }
 }
