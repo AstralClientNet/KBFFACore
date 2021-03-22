@@ -39,9 +39,6 @@ class ScoreboardHandler
             $this->lineCreate($player, 5, "§r§r§r§r§r§r§r§r--------------------");
             $this->scoreboard[$player->getName()] = $player->getName();
             $this->main[$player->getName()] = $player->getName();
-
-
-
     }
 
     public function lineTitle($player, string $title)

@@ -143,6 +143,7 @@ class PlayerListener implements Listener{
     public function onDeath(PlayerDeathEvent $e){
     $p = $e->getPlayer();
     $pn = $p->getName();
+    $this->plugin->getScoreboardHandler()->scoreboard($this);
     $e->setDrops(array());
 
         if ($p instanceof Player) {
