@@ -6,14 +6,14 @@ namespace TheBarii\KnockbackFFA\Listeners;
 
 use pocketmine\event\Listener;
 use pocketmine\Player;
+use pocketmine\network\mcpe\protocol\LevelEventPacket;
+use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
+use pocketmine\network\mcpe\protocol\PlaySoundPacket;
 use pocketmine\Server;
 use pocketmine\level\particle\FloatingTextParticle;
 use pocketmine\item\Item;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\math\Vector3;
-use pocketmine\network\mcpe\protocol\LevelEventPacket;
-use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
-use pocketmine\network\mcpe\protocol\PlaySoundPacket;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\player\PlayerCreationEvent;
 use pocketmine\inventory\ArmorInventory;
@@ -187,6 +187,7 @@ class PlayerListener implements Listener{
                         if($damager->isAlive()) {
                             $damager->setHealth($damager->getMaxHealth());
                         }
+                        $this->levelupSound($damager);
                         $e->setDeathMessage($dm);
                     }
                     if(Main::getInstance()->getDatabaseHandler()->getKillstreak($damager) >= 5){
@@ -216,6 +217,21 @@ class PlayerListener implements Listener{
 
         $this->plugin->getScoreboardHandler()->scoreboard($this);
         }
+
+    public static function levelupSound(Player $player)
+    {
+        if (is_null($player)) return;
+        $sound1 = new PlaySoundPacket();
+        $sound1->soundName = "random.levelup";
+        $sound1->x = $player->getX();
+        $sound1->y = $player->getY();
+        $sound1->z = $player->getZ();
+        $sound1->volume = 10;
+        $sound1->pitch = 1;
+
+        $player->dataPacket($sound1);
+
+    }
 
     /**
      * @priority HIGHEST
