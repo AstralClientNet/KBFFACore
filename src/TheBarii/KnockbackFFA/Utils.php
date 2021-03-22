@@ -67,7 +67,6 @@ class Utils{
                 $deaths=Main::getInstance()->getDatabaseHandler()->getDeaths($player);
                 $killstreak=Main::getInstance()->getDatabaseHandler()->getKillstreak($player);
                 Main::getInstance()->getDatabaseHandler()->setKillstreak($player, 0);
-                Main::getInstance()->getDatabaseHandler()->setBestKillstreak($player, 0);
                 if(!is_null($oplayer) and $killstreak > 0) $oplayer->sendMessage("§cYou lost your killstreak of ".$killstreak."!");
                 break;
             case 2:

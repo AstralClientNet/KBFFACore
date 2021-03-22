@@ -29,12 +29,14 @@ class ScoreboardHandler
 
         foreach($this->plugin->getServer()->getOnlinePlayers() as $player)
             $ks =  $this->plugin->getDatabaseHandler()->getKillstreak($player->getName());
+            $bks = Main::getInstance()->getDatabaseHandler()->getBestKillstreak($player);
             $this->lineTitle($player, "  "."§bKnockback FFA ");
             $online = count($this->plugin->getServer()->getOnlinePlayers());
             $this->lineCreate($player, 1, ("§r§r§r§r§r§r§r§r--------------------"));
             $this->lineCreate($player, 2, "§cOnline: $online");
             $this->lineCreate($player, 3, "Your killstreak: §b$ks");
-            $this->lineCreate($player, 4, "§r§r§r§r§r§r§r§r--------------------");
+        $this->lineCreate($player, 4, "Best killstreak: §c$bks");
+            $this->lineCreate($player, 5, "§r§r§r§r§r§r§r§r--------------------");
             $this->scoreboard[$player->getName()] = $player->getName();
             $this->main[$player->getName()] = $player->getName();
 

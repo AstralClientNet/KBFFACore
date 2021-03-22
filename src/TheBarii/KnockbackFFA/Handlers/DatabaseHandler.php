@@ -67,13 +67,13 @@ class DatabaseHandler{
     }
 
     public function topKillstreaks(string $viewer){
-        $query=$this->plugin->main->query("SELECT * FROM essentialstats ORDER BY bestkillstreak DESC LIMIT 10;");
+        $query=$this->plugin->main->query("SELECT * FROM essentialstats ORDER BY killstreak DESC LIMIT 10;");
         $message="";
         $i=0;
         while($resultArr=$query->fetchArray(SQLITE3_ASSOC)){
             $j=$i + 1;
             $player2=$resultArr['player'];
-            $val=$this->getBestKillstreak($player2);
+            $val=$this->getKillstreak($player2);
 
                 if($j===1){
                     $message.="§c#1 §7".$player2." §7-§d §o".$val."\n";
