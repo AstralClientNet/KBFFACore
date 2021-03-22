@@ -92,7 +92,7 @@ class DatabaseHandler{
     }
 
     public function setKills($player, $int){
-        $this->plugin->main->exec("UPDATE essentialstats SET kills='$int' WHERE player='".Utils::getPlayerName($player)."';");
+        $this->plugin->main->exec("UPDATE essentialstats SET kills='$int' WHERE player='".Main::getPlayerName($player)."';");
     }
 
     public function topKills(string $viewer){
