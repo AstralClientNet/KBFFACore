@@ -43,6 +43,7 @@ use pocketmine\event\entity\ProjectileHitEntityEvent;
 use pocketmine\event\entity\ProjectileLaunchEvent;
 use pocketmine\event\entity\EntityShootBowEvent;
 use TheBarii\KnockbackFFA\Utils;
+use pocketmine\item\Durable;
 
 
 class PlayerListener implements Listener{
@@ -80,6 +81,14 @@ class PlayerListener implements Listener{
             $this->plugin->getScoreboardHandler()->scoreboard($this);
             $this->loadUpdatingFloatingTexts($p);
 
+    }
+
+
+    /**
+     * @priority HIGHEST
+     */
+    public function onItemUse(PlayerItemConsumeEvent $event){
+        $event->setCancelled();
     }
 
     public function onPreLogin(PlayerPreLoginEvent $event)
@@ -335,6 +344,14 @@ class PlayerListener implements Listener{
         $chest = Item::get(299);
         $pant = Item::get(300);
         $boot = Item::get(301);
+
+        $allitems = array($sword, $stick, $bow, $stone, $enderpearl, $arrow, $cob, $helm, $chest, $pant, $boot);
+
+        foreach($allitems as $itemz) {
+            if($itemz instanceof Durable) {
+                $itemz->setUnbreakable();
+            }
+        }
 
         //enchants
         $sharpness = Enchantment::getEnchantment(9);
