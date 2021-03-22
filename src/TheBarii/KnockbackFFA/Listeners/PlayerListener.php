@@ -143,7 +143,6 @@ class PlayerListener implements Listener{
     public function onDeath(PlayerDeathEvent $e){
     $p = $e->getPlayer();
     $pn = $p->getName();
-    $this->plugin->getScoreboardHandler()->scoreboard($this);
     $e->setDrops(array());
 
         if ($p instanceof Player) {
@@ -169,7 +168,7 @@ class PlayerListener implements Listener{
                         $dm = "§e$pn §7was " . $messages[array_rand($messages)] . " by §c$dn §7[" . $finalhealth . " HP]";
                         $e->setDeathMessage($dm);
                     }
-                    if(Main::getInstance()->getDatabaseHandler()->getKillstreak($damager) == 1){
+                    if(Main::getInstance()->getDatabaseHandler()->getKillstreak($damager) >= 5){
                         $this->plugin->getServer()->broadcastMessage("§c".$damager->getName()." §7just got a killstreak of §6".Main::getInstance()->getDatabaseHandler()->getKillstreak($damager)."!");
                     }
 
@@ -184,6 +183,7 @@ class PlayerListener implements Listener{
         $this->text->setText($ks);
         $level = $this->plugin->getServer()->getLevelByName("kbstick1");
         $level->addParticle($this->text);
+        $this->plugin->getScoreboardHandler()->scoreboard($this);
         }
 
     /**
@@ -197,19 +197,6 @@ class PlayerListener implements Listener{
         }
         $y = $p->getFloorY();
         if($y > 79) {
-            $e->setCancelled();
-        }
-    }
-
-    /**
-     * @priority HIGHEST
-     */
-    public function onArrowHitEntity(ProjectileHitEntityEvent $e){
-
-        $p = $e->getEntity();
-        $y = $p->getFloorY();
-        if($y > 79){
-
             $e->setCancelled();
         }
     }

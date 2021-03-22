@@ -27,10 +27,12 @@ use TheBarii\KnockbackFFA\commands\TpallCommand;
 use TheBarii\KnockbackFFA\commands\WhisperCommand;
 use TheBarii\KnockbackFFA\Handlers\DatabaseHandler;
 use TheBarii\KnockbackFFA\Handlers\ScoreboardHandler;
+use TheBarii\KnockbackFFA\Tasks\Scoreboard;
 
 
 
-class Main extends PluginBase{
+class Main extends PluginBase
+{
 
 
     private static $instance;
@@ -39,38 +41,41 @@ class Main extends PluginBase{
     public $text;
 
 
- public function onEnable():void{
+    public function onEnable(): void
+    {
 
-     self::$instance=$this;
+        self::$instance = $this;
 
-     $this->getServer()->loadLevel("kbffa");
-     $this->disableCommands();
-     $this->setListeners();
-     $this->setCommands();
-     $this->setHandlers();
-     $this->loadUpdatingFloatingTexts();
-     $this->db = @mkdir($this->getDataFolder()."kb.db");
-     $this->main=new\SQLite3($this->getDataFolder()."kb.db");
-     $this->text = new FloatingTextParticle(new Vector3(77, 48, -892), "", "");
-     $this->main=new\SQLite3($this->getDataFolder()."kb.db");
+        $this->getServer()->loadLevel("kbffa");
+        $this->disableCommands();
+        $this->setListeners();
+        $this->setCommands();
+        $this->setHandlers();
+        $this->loadUpdatingFloatingTexts();
+        $this->setTasks();
+        $this->db = @mkdir($this->getDataFolder() . "kb.db");
+        $this->main = new\SQLite3($this->getDataFolder() . "kb.db");
+        $this->text = new FloatingTextParticle(new Vector3(77, 48, -892), "", "");
+        $this->main = new\SQLite3($this->getDataFolder() . "kb.db");
 
-     $this->main->exec("CREATE TABLE IF NOT EXISTS rank (player TEXT PRIMARY KEY, rank TEXT);");
+        $this->main->exec("CREATE TABLE IF NOT EXISTS rank (player TEXT PRIMARY KEY, rank TEXT);");
 
-     $this->main->exec("CREATE TABLE IF NOT EXISTS essentialstats (player TEXT PRIMARY KEY, kills INT, deaths INT, kdr REAL, killstreak INT, bestkillstreak INT, coins INT, elo INT);");
-     $this->main->exec("CREATE TABLE IF NOT EXISTS matchstats (player TEXT PRIMARY KEY, elo INT, wins INT, losses INT, elogained INT, elolost INT);");
-     $this->main->exec("CREATE TABLE IF NOT EXISTS temporary (player TEXT PRIMARY KEY, dailykills INT, dailydeaths INT);");
-     $this->main->exec("CREATE TABLE IF NOT EXISTS temporaryranks (player TEXT PRIMARY KEY, temprank TEXT, duration INT, oldrank TEXT);");
-     $this->main->exec("CREATE TABLE IF NOT EXISTS voteaccess (player TEXT PRIMARY KEY, bool TEXT, duration INT);");
-     $this->main->exec("CREATE TABLE IF NOT EXISTS levels (player TEXT PRIMARY KEY, level INT, neededxp INT, currentxp INT, totalxp INT);");
+        $this->main->exec("CREATE TABLE IF NOT EXISTS essentialstats (player TEXT PRIMARY KEY, kills INT, deaths INT, kdr REAL, killstreak INT, bestkillstreak INT, coins INT, elo INT);");
+        $this->main->exec("CREATE TABLE IF NOT EXISTS matchstats (player TEXT PRIMARY KEY, elo INT, wins INT, losses INT, elogained INT, elolost INT);");
+        $this->main->exec("CREATE TABLE IF NOT EXISTS temporary (player TEXT PRIMARY KEY, dailykills INT, dailydeaths INT);");
+        $this->main->exec("CREATE TABLE IF NOT EXISTS temporaryranks (player TEXT PRIMARY KEY, temprank TEXT, duration INT, oldrank TEXT);");
+        $this->main->exec("CREATE TABLE IF NOT EXISTS voteaccess (player TEXT PRIMARY KEY, bool TEXT, duration INT);");
+        $this->main->exec("CREATE TABLE IF NOT EXISTS levels (player TEXT PRIMARY KEY, level INT, neededxp INT, currentxp INT, totalxp INT);");
 
- }
+    }
 
-        public function getUpdatingFloatingTexts(){
+    public function getUpdatingFloatingTexts()
+    {
 
 
+    }
 
-         }
-    public function loadUpdatingFloatingTexts():void
+    public function loadUpdatingFloatingTexts(): void
     {
         foreach ($this->getServer()->getOnlinePlayers() as $player) {
             $title = "§5§lTop Killstreaks §c§lLeaderboard";
@@ -84,58 +89,67 @@ class Main extends PluginBase{
         }
     }
 
-    public static function getInstance():Main{
+    public static function getInstance(): Main
+    {
         return self::$instance;
     }
 
-    public static function getDatabaseHandler():DatabaseHandler{
+    public static function getDatabaseHandler(): DatabaseHandler
+    {
         return self::$databaseHandler;
     }
 
 
-    public static function getScoreboardHandler():ScoreboardHandler{
-    return self::$scoreboardHandler;
+    public static function getScoreboardHandler(): ScoreboardHandler
+    {
+        return self::$scoreboardHandler;
     }
 
 
-    public function replaceProcess(Player $player, string $string):string{
-        $string=str_replace("{topkillstreaks}", $this->getDatabaseHandler()->topKillstreaks($player->getName()), $string);
+    public function replaceProcess(Player $player, string $string): string
+    {
+        $string = str_replace("{topkillstreaks}", $this->getDatabaseHandler()->topKillstreaks($player->getName()), $string);
         return $string;
     }
 
-    public static function isPlayer($player):bool{
+    public static function isPlayer($player): bool
+    {
         return !is_null(self::getPlayer($player));
     }
-    public static function getPlayer($info){
-        $result=null;
-        $player=self::getPlayerName($info);
-        if($player===null){
+
+    public static function getPlayer($info)
+    {
+        $result = null;
+        $player = self::getPlayerName($info);
+        if ($player === null) {
             return $result;
             return;
         }
-        $player=Server::getInstance()->getPlayer($player);
-        if($player instanceof Player){
-            $result=$player;
+        $player = Server::getInstance()->getPlayer($player);
+        if ($player instanceof Player) {
+            $result = $player;
         }
         return $result;
     }
 
 
-public static function getPlayerName($player){
-    $result=null;
-    if(isset($player) and !is_null($player)){
-        if($player instanceof Player){
-            $result=$player->getName();
-        }elseif(is_string($player)){
-            $result=$player;
+    public static function getPlayerName($player)
+    {
+        $result = null;
+        if (isset($player) and !is_null($player)) {
+            if ($player instanceof Player) {
+                $result = $player->getName();
+            } elseif (is_string($player)) {
+                $result = $player;
+            }
         }
+        return $result;
     }
-    return $result;
-}
 
 
-public function disableCommands(){
-        $map=$this->getServer()->getCommandMap();
+    public function disableCommands()
+    {
+        $map = $this->getServer()->getCommandMap();
         $map->unregister($map->getCommand("kill"));
         $map->unregister($map->getCommand("me"));
         $map->unregister($map->getCommand("op"));
@@ -156,32 +170,37 @@ public function disableCommands(){
 
     }
 
- public function setCommands(){
+    public function setCommands()
+    {
 
 
-     //TODO: Staff utils & commands
-     $map=$this->getServer()->getCommandMap();
-     $map->register("gm", new GamemodeCommand($this));
-     $map->register("ping", new PingCommand($this));
-     $map->register("tpall", new TpallCommand($this));
-     $map->register("reply", new ReplyCommand($this));
-     $map->register("whisper", new WhisperCommand($this));
-     $this->getLogger()->info("--- Loaded Commands ---");
- }
+        //TODO: Staff utils & commands
+        $map = $this->getServer()->getCommandMap();
+        $map->register("gm", new GamemodeCommand($this));
+        $map->register("ping", new PingCommand($this));
+        $map->register("tpall", new TpallCommand($this));
+        $map->register("reply", new ReplyCommand($this));
+        $map->register("whisper", new WhisperCommand($this));
+        $this->getLogger()->info("--- Loaded Commands ---");
+    }
 
-public function setListeners(){
+    public function setListeners()
+    {
 
-    $map=$this->getServer()->getPluginManager();
-    $map->registerEvents(new PlayerListener($this), $this);
-    $map->registerEvents(new BlockListener($this), $this);
-    $this->getLogger()->info("--- Loaded Listeners ---");
-  }
+        $map = $this->getServer()->getPluginManager();
+        $map->registerEvents(new PlayerListener($this), $this);
+        $map->registerEvents(new BlockListener($this), $this);
+        $this->getLogger()->info("--- Loaded Listeners ---");
+    }
 
     public function setHandlers()
     {
-        self::$databaseHandler=new DatabaseHandler();
-        self::$scoreboardHandler=new ScoreboardHandler($this);
+        self::$databaseHandler = new DatabaseHandler();
+        self::$scoreboardHandler = new ScoreboardHandler($this);
     }
 
-
+    public function setTasks()
+    {
+        $this->getScheduler()->scheduleRepeatingTask(new Scoreboard($this), 20);
+    }
 }
