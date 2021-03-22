@@ -60,7 +60,6 @@ class DatabaseHandler{
 
     public function setKillstreak($player, $int){
         $this->plugin->main->exec("UPDATE essentialstats SET killstreak='$int' WHERE player='".Main::getPlayerName($player)."';");
-        //$this->plugin->getScoreboardHandler()->updateMainLineKillstreak($player);
     }
     public function setBestKillstreak($player, $int){
         $this->plugin->main->exec("UPDATE essentialstats SET bestkillstreak='$int' WHERE player='".Main::getPlayerName($player)."';");
@@ -89,6 +88,35 @@ class DatabaseHandler{
                 }
                 ++$i;
             }
+        return$message;
+    }
+
+    public function setKills($player, $int){
+        $this->plugin->main->exec("UPDATE essentialstats SET kills='$int' WHERE player='".Utils::getPlayerName($player)."';");
+    }
+
+    public function topKills(string $viewer){
+        $query=$this->plugin->main->query("SELECT * FROM essentialstats ORDER BY kills DESC LIMIT 10;");
+        $message="";
+        $i=0;
+        while($resultArr=$query->fetchArray(SQLITE3_ASSOC)){
+            $j=$i + 1;
+            $player=$resultArr['player'];
+            $val=$this->getKills($player);
+                if($j===1){
+                    $message.="§c#1 §7".$player." §7-§d §o".$val."\n";
+                }
+                if($j===2){
+                    $message.="§e#2 §7".$player." §7-§d §o".$val."\n";
+                }
+                if($j===3){
+                    $message.="§a#3 §7".$player." §7-§d §o".$val."\n";
+                }
+                if($j!==1 and $j!==2 and $j!==3){
+                    $message.="§7#".$j." §7".$player." §7-§d §o".$val."\n";
+                }
+                ++$i;
+        }
         return$message;
     }
 
