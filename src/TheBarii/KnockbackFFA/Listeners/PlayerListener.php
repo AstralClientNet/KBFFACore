@@ -52,6 +52,7 @@ class PlayerListener implements Listener{
     public function __construct(Main $plugin){
         $this->plugin=$plugin;
         $this->text = new FloatingTextParticle(new Vector3(242, 90, 182), "", "");
+        $this->text2 = new FloatingTextParticle(new Vector3(244, 90, 184), "", "");
     }
     /**
      * @priority HIGHEST
@@ -80,7 +81,7 @@ class PlayerListener implements Listener{
 
             $this->plugin->getScoreboardHandler()->scoreboard($this);
             $this->loadUpdatingFloatingTexts($p);
-
+            $this->loadUpdatingFloatingTexts2($p);
     }
 
     public function onPreLogin(PlayerPreLoginEvent $event)
@@ -102,6 +103,18 @@ class PlayerListener implements Listener{
             $this->text->setText($ks);
             $level = $this->plugin->getServer()->getLevelByName("kbstick1");
             $level->addParticle($this->text);
+    }
+
+    public function loadUpdatingFloatingTexts2(Player $player): void
+    {
+
+            $title = "§5§lTop Kills §c§lLeaderboard";
+            $k = $this->plugin->getDatabaseHandler()->topKills($player->getName());
+
+            $this->text2->setTitle($title);
+            $this->text2->setText($k);
+            $level = $this->plugin->getServer()->getLevelByName("kbstick1");
+            $level->addParticle($this->text2);
     }
 
     /**
@@ -191,6 +204,16 @@ class PlayerListener implements Listener{
         $this->text->setText($ks);
         $level = $this->plugin->getServer()->getLevelByName("kbstick1");
         $level->addParticle($this->text);
+
+
+                $title = "§5§lTop Kills §c§lLeaderboard";
+                $k = $this->plugin->getDatabaseHandler()->topKills($p->getName());
+
+                $this->text2->setTitle($title);
+                $this->text2->setText($k);
+                $level = $this->plugin->getServer()->getLevelByName("kbstick1");
+                $level->addParticle($this->text2);
+
         $this->plugin->getScoreboardHandler()->scoreboard($this);
         }
 
@@ -234,6 +257,15 @@ class PlayerListener implements Listener{
             $this->text->setText($ks);
             $level = $this->plugin->getServer()->getLevelByName("kbstick1");
             $level->addParticle($this->text);
+
+
+            $title = "§5§lTop Kills §c§lLeaderboard";
+            $k = $this->plugin->getDatabaseHandler()->topKills($p->getName());
+
+            $this->text2->setTitle($title);
+            $this->text2->setText($k);
+            $level = $this->plugin->getServer()->getLevelByName("kbstick1");
+            $level->addParticle($this->text2);
 
 
             if($p->hasTagged()){

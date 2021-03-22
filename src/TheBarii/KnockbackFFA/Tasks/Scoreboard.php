@@ -64,6 +64,7 @@ class Scoreboard extends Task
             if (!$player == null) {
                 $this->removeScoreboard($player);
         $ks = $this->plugin->getDatabaseHandler()->getKillstreak($player->getName());
+        $k = $this->plugin->getDatabaseHandler()->getKills($player->getName());
         $bks = Main::getInstance()->getDatabaseHandler()->getBestKillstreak($player);
         $this->lineTitle($player, "  " . "§bKnockback FFA ");
         $online = count($this->plugin->getServer()->getOnlinePlayers());
@@ -72,6 +73,7 @@ class Scoreboard extends Task
         $this->lineCreate($player, 3, "Your killstreak: §b$ks");
         $this->lineCreate($player, 4, "Best killstreak: §c$bks");
         $this->lineCreate($player, 5, "§r§r§r§r§r§r§r§r--------------------");
+        $this->lineCreate($player, 6, "Your kills: §7$k ");
         $this->scoreboard[$player->getName()] = $player->getName();
         $this->main[$player->getName()] = $player->getName();
 

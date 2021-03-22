@@ -39,6 +39,7 @@ class Main extends PluginBase
     private static $scoreboardHandler;
     private static $databaseHandler;
     public $text;
+    public $text2;
 
 
     public function onEnable(): void
@@ -52,10 +53,12 @@ class Main extends PluginBase
         $this->setCommands();
         $this->setHandlers();
         $this->loadUpdatingFloatingTexts();
+        $this->loadUpdatingFloatingTexts2();
         $this->setTasks();
         $this->db = @mkdir($this->getDataFolder() . "kb.db");
         $this->main = new\SQLite3($this->getDataFolder() . "kb.db");
-        $this->text = new FloatingTextParticle(new Vector3(77, 48, -892), "", "");
+        $this->text = new FloatingTextParticle(new Vector3(242, 90, 182), "", "");
+        $this->text2 = new FloatingTextParticle(new Vector3(244, 90, 184), "", "");
         $this->main = new\SQLite3($this->getDataFolder() . "kb.db");
 
         $this->main->exec("CREATE TABLE IF NOT EXISTS rank (player TEXT PRIMARY KEY, rank TEXT);");
@@ -69,11 +72,6 @@ class Main extends PluginBase
 
     }
 
-    public function getUpdatingFloatingTexts()
-    {
-
-
-    }
 
     public function loadUpdatingFloatingTexts(): void
     {
@@ -83,6 +81,20 @@ class Main extends PluginBase
 
             $this->text->setTitle($title);
             $this->text->setText($ks);
+            $level = $this->getServer()->getLevelByName("kbstick1");
+            $level->addParticle($this->text);
+            $this->text->sendToAll();
+        }
+    }
+
+    public function loadUpdatingFloatingTexts2(): void
+    {
+        foreach ($this->getServer()->getOnlinePlayers() as $player) {
+            $title = "§5§lTop Kills §c§lLeaderboard";
+            $k = $this->getDatabaseHandler()->topKills($player->getName());
+
+            $this->text->setTitle($title);
+            $this->text->setText($k);
             $level = $this->getServer()->getLevelByName("kbstick1");
             $level->addParticle($this->text);
             $this->text->sendToAll();

@@ -55,6 +55,7 @@ class Utils{
                 $kills=Main::getInstance()->getDatabaseHandler()->getKills($player);
                 $killstreak=Main::getInstance()->getDatabaseHandler()->getKillstreak($player);
                 Main::getInstance()->getDatabaseHandler()->setKillstreak($player, $killstreak + 1);
+                Main::getInstance()->getDatabaseHandler()->setKills($player, $kills+ 1);
                 $bestkillstreak=Main::getInstance()->getDatabaseHandler()->getBestKillstreak($player);
                 $newkillstreak=Main::getInstance()->getDatabaseHandler()->getKillstreak($player);
                 if($newkillstreak >= $bestkillstreak){
