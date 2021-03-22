@@ -83,14 +83,6 @@ class PlayerListener implements Listener{
 
     }
 
-
-    /**
-     * @priority HIGHEST
-     */
-    public function onItemUse(PlayerItemConsumeEvent $event){
-        $event->setCancelled();
-    }
-
     public function onPreLogin(PlayerPreLoginEvent $event)
     {
         $player = $event->getPlayer();
