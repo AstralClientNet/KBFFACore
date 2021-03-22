@@ -168,6 +168,12 @@ class PlayerListener implements Listener{
                         $dm = "§e$pn §7was " . $messages[array_rand($messages)] . " by §c$dn §7[" . $finalhealth . " HP]";
                         $e->setDeathMessage($dm);
                     }
+                    if(Main::getInstance()->getDatabaseHandler()->getKillstreak($damager) == 1){
+
+                        $this->plugin->getServer()->broadcastMessage("§c".$damager->getName()." §7just got a killstreak of §6".Main::getInstance()->getDatabaseHandler()->getKillstreak($damager)."!");
+
+                    }
+
                 }
             }
         }
