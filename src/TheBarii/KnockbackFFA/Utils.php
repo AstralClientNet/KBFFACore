@@ -51,12 +51,9 @@ class Utils{
     public static function updateStats($player, int $reason){
         switch($reason){
             case 0:
-                $oplayer=self::getPlayer($player);
+                $oplayer=Main::getPlayer($player);
                 $kills=Main::getInstance()->getDatabaseHandler()->getKills($player);
-                $dailykills=Main::getInstance()->getDatabaseHandler()->getDailyKills($player);
                 $killstreak=Main::getInstance()->getDatabaseHandler()->getKillstreak($player);
-                Main::getInstance()->getDatabaseHandler()->setKills($player, $kills+ 1);
-                Main::getInstance()->getDatabaseHandler()->setDailyKills($player, $dailykills + 1);
                 Main::getInstance()->getDatabaseHandler()->setKillstreak($player, $killstreak + 1);
                 $bestkillstreak=Main::getInstance()->getDatabaseHandler()->getBestKillstreak($player);
                 $newkillstreak=Main::getInstance()->getDatabaseHandler()->getKillstreak($player);
@@ -66,20 +63,15 @@ class Utils{
                 if(!is_null($oplayer)) $oplayer->sendMessage("§aYou are on a killstreak of ".$newkillstreak."!");
                 break;
             case 1:
-                $oplayer=self::getPlayer($player);
+                $oplayer=Main::getPlayer($player);
                 $deaths=Main::getInstance()->getDatabaseHandler()->getDeaths($player);
-                $dailydeaths=Main::getInstance()->getDatabaseHandler()->getDailyDeaths($player);
                 $killstreak=Main::getInstance()->getDatabaseHandler()->getKillstreak($player);
-                Main::getInstance()->getDatabaseHandler()->setDeaths($player, $deaths + 1);
-                Main::getInstance()->getDatabaseHandler()->setDailyDeaths($player, $dailydeaths + 1);
                 Main::getInstance()->getDatabaseHandler()->setKillstreak($player, 0);
+                Main::getInstance()->getDatabaseHandler()->setBestKillstreak($player, 0);
                 if(!is_null($oplayer) and $killstreak > 0) $oplayer->sendMessage("§cYou lost your killstreak of ".$killstreak."!");
                 break;
             case 2:
-                $deaths=Core::getInstance()->getDatabaseHandler()->getDeaths($player);
-                $dailydeaths=Core::getInstance()->getDatabaseHandler()->getDailyDeaths($player);
-                Main::getInstance()->getDatabaseHandler()->setDeaths($player, $deaths + 1);
-                Main::getInstance()->getDatabaseHandler()->setDailyDeaths($player, $dailydeaths + 1);
+                $deaths=Main::getInstance()->getDatabaseHandler()->getDeaths($player);
                 Main::getInstance()->getDatabaseHandler()->setKillstreak($player, 0);
                 break;
             default:
@@ -89,7 +81,7 @@ class Utils{
 
 
     public static function spawnUpdatingTextsToPlayer($player){
-        $player=self::getPlayer($player);
+        $player=Main::getPlayer($player);
         if(is_null($player)) return;
             $title = "§5§lTop Killstreaks §c§lLeaderboard";
             $plugin = Main::getInstance();
@@ -100,7 +92,5 @@ class Utils{
             $ft->setText($ks);
             $level->addParticle($ft, [$player]);
         }
-
-
 
 }

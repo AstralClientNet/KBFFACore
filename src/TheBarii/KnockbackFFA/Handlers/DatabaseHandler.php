@@ -58,6 +58,14 @@ class DatabaseHandler{
         return (int) $result["kills"];
     }
 
+    public function setKillstreak($player, $int){
+        $this->plugin->main->exec("UPDATE essentialstats SET killstreak='$int' WHERE player='".Main::getPlayerName($player)."';");
+        //$this->plugin->getScoreboardHandler()->updateMainLineKillstreak($player);
+    }
+    public function setBestKillstreak($player, $int){
+        $this->plugin->main->exec("UPDATE essentialstats SET bestkillstreak='$int' WHERE player='".Main::getPlayerName($player)."';");
+    }
+
     public function topKillstreaks(string $viewer){
         $query=$this->plugin->main->query("SELECT * FROM essentialstats ORDER BY bestkillstreak DESC LIMIT 10;");
         $message="";

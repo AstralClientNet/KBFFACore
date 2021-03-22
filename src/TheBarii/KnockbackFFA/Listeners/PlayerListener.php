@@ -140,20 +140,6 @@ class PlayerListener implements Listener{
     /**
      * @priority HIGHEST
      */
-    public function onArrowHitEntity(ProjectileHitEntityEvent $e){
-
-        $p = $e->getEntity();
-        $d = $e->getDamager();
-
-        $y = $p->getFloorY();
-        if($y > 79){
-
-            $e->setCancelled();
-        }
-    }
-    /**
-     * @priority HIGHEST
-     */
     public function onDeath(PlayerDeathEvent $e){
     $p = $e->getPlayer();
     $pn = $p->getName();
@@ -198,15 +184,46 @@ class PlayerListener implements Listener{
     /**
      * @priority HIGHEST
      */
+    public function onHit(EntityDamageByEntityEvent $e){
+        $p = $e->getEntity();
+        if($e->getDamager() instanceof Player) {
+            $player = $e->getDamager();
+            $p->setTagged($player);
+        }
+        $y = $p->getFloorY();
+        if($y > 79) {
+            $e->setCancelled();
+        }
+    }
+
+    /**
+     * @priority HIGHEST
+     */
+    public function onArrowHitEntity(ProjectileHitEntityEvent $e){
+
+        $p = $e->getEntity();
+        $y = $p->getFloorY();
+        if($y > 79){
+
+            $e->setCancelled();
+        }
+    }
+
+    /**
+     * @priority HIGHEST
+     */
     public function onMove(PlayerMoveEvent $e){
         $p = $e->getPlayer();
         $y = $p->getFloorY();
         if($y < 45){
             $p->kill();
+            if($p instanceof CPlayer) Utils::updateStats($p, 1);
             if($p->hasTagged()){
                 $whoTagged = $p->getTagged();
                 $whoTagged->getInventory()->addItem(Item::get(368, 0, 1));
                 $whoTagged->getInventory()->addItem(Item::get(262, 0, 1));
+                if($whoTagged instanceof CPlayer) Utils::updateStats($whoTagged, 0);
+                if($p instanceof CPlayer) Utils::updateStats($p, 1);
             }
         }
     }
@@ -270,20 +287,6 @@ class PlayerListener implements Listener{
         $p = $e->getPlayer();
         $this->setItems($p);
         $p->setTagged(null);
-    }
-    /**
-     * @priority HIGHEST
-     */
-    public function onHit(EntityDamageByEntityEvent $e){
-        $p = $e->getEntity();
-        if($e->getDamager() instanceof Player) {
-            $player = $e->getDamager();
-            $p->setTagged($player);
-        }
-        $y = $p->getFloorY();
-        if($y > 79) {
-            $e->setCancelled();
-        }
     }
     /**
      * @priority LOWEST
