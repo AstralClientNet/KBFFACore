@@ -47,13 +47,17 @@ class BlockListener implements Listener{
         $x = $block->getX();
         $y = $block->getY();
         $z = $block->getZ();
-        $this->plugin->getScheduler()->scheduleDelayedTask(new BlockReset($block, $x, $y, $z), 100);
+        if (!$e->getPlayer()->getGamemode() == 0) {
+            $this->plugin->getScheduler()->scheduleDelayedTask(new BlockReset($block, $x, $y, $z), 100);
+        }
     }
    public function onBreak(BlockBreakEvent $e){
 
         $blockID = $e->getBlock()->getID();
         if($blockID == 168 or $blockID == 209 or $blockID == 181 or $blockID == 182 or $blockID == 44) {
+            if (!$e->getPlayer()->getGamemode() == 0) {
                 $e->setCancelled();
+            }
         }
     }
 }

@@ -145,33 +145,34 @@ class PlayerListener implements Listener{
     $pn = $p->getName();
     $e->setDrops(array());
 
-
         if ($p instanceof Player) {
             $cause = $p->getLastDamageCause();
             if ($cause instanceof EntityDamageByEntityEvent) {
                 $damager = $cause->getDamager();
-                $damager->setHealth($damager->getMaxHealth());
-                $p->setHealth($p->getMaxHealth());
+
                 if ($damager instanceof Player) {
-                    $damager->heal(20);
-                    $p->heal(20);
                     $finalhealth = round($damager->getHealth(), 1);
+                    if($damager->isAlive()) {
+                        $damager->setHealth($damager->getMaxHealth());
+                    }
                     $dn = $damager->getName();
-                    $p->setTagged(null);
                     if ($dn == $pn) {
                         $dm = "§c$pn died to the void.";
                         $e->setDeathMessage($dm);
 
-                    }else {
-                        $damager->setHealth($damager->getMaxHealth());
-                        $p->setHealth($p->getMaxHealth());
-                        $damager->getInventory()->addItem(Item::get(368, 0, 1));
-                        $damager->getInventory()->addItem(Item::get(262, 0, 1));
-                        $damager->getInventory()->addItem(Item::get(30, 0, 1));
+                    }else{
+                        if($damager->isAlive()) {
+                            $damager->getInventory()->addItem(Item::get(368, 0, 1));
+                            $damager->getInventory()->addItem(Item::get(262, 0, 1));
+                            $damager->getInventory()->addItem(Item::get(30, 0, 1));
+                        }
                         if($damager instanceof CPlayer) Utils::updateStats($damager, 0);
                         if($p instanceof CPlayer) Utils::updateStats($p, 1);
                         $messages = ["quickied", "railed", "clapped", "killed", "smashed", "OwOed", "UwUed", "sent to the heavens"];
                         $dm = "§e$pn §7was " . $messages[array_rand($messages)] . " by §c$dn §7[" . $finalhealth . " HP]";
+                        if($damager->isAlive()) {
+                            $damager->setHealth($damager->getMaxHealth());
+                        }
                         $e->setDeathMessage($dm);
                     }
                     if(Main::getInstance()->getDatabaseHandler()->getKillstreak($damager) >= 5){
@@ -214,7 +215,16 @@ class PlayerListener implements Listener{
         $p = $e->getPlayer();
         $y = $p->getFloorY();
         if($y < 45){
+
+            $x = 244;
+            $y = 88;
+            $z = 182;
+
+            $level = $this->plugin->getServer()->getLevelByName("kbstick1");
+            $p->teleport(new Vector3($x, $y, $z, 0, 0, $level));
             $p->kill();
+
+
             if($p instanceof CPlayer) Utils::updateStats($p, 1);
             $title = "§5§lTop Killstreaks §c§lLeaderboard";
             $ks = $this->plugin->getDatabaseHandler()->topKillstreaks($p->getName());
@@ -223,10 +233,14 @@ class PlayerListener implements Listener{
             $this->text->setText($ks);
             $level = $this->plugin->getServer()->getLevelByName("kbstick1");
             $level->addParticle($this->text);
+
+
             if($p->hasTagged()){
                 $whoTagged = $p->getTagged();
-                $whoTagged->getInventory()->addItem(Item::get(368, 0, 1));
-                $whoTagged->getInventory()->addItem(Item::get(262, 0, 1));
+                if($whoTagged->isAlive()) {
+                    $whoTagged->getInventory()->addItem(Item::get(368, 0, 1));
+                    $whoTagged->getInventory()->addItem(Item::get(262, 0, 1));
+                }
                 if($whoTagged instanceof CPlayer) Utils::updateStats($whoTagged, 0);
                 if($p instanceof CPlayer) Utils::updateStats($p, 1);
             }
