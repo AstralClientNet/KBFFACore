@@ -145,12 +145,16 @@ class PlayerListener implements Listener{
     $pn = $p->getName();
     $e->setDrops(array());
 
+
         if ($p instanceof Player) {
             $cause = $p->getLastDamageCause();
             if ($cause instanceof EntityDamageByEntityEvent) {
                 $damager = $cause->getDamager();
+                $damager->setHealth($damager->getMaxHealth());
+                $p->setHealth($p->getMaxHealth());
                 if ($damager instanceof Player) {
-                    $this->setItems($p);
+                    $damager->heal(20);
+                    $p->heal(20);
                     $finalhealth = round($damager->getHealth(), 1);
                     $dn = $damager->getName();
                     $p->setTagged(null);
@@ -159,6 +163,8 @@ class PlayerListener implements Listener{
                         $e->setDeathMessage($dm);
 
                     }else {
+                        $damager->setHealth($damager->getMaxHealth());
+                        $p->setHealth($p->getMaxHealth());
                         $damager->getInventory()->addItem(Item::get(368, 0, 1));
                         $damager->getInventory()->addItem(Item::get(262, 0, 1));
                         $damager->getInventory()->addItem(Item::get(30, 0, 1));
