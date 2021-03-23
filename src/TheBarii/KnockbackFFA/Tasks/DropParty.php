@@ -44,7 +44,7 @@ use pocketmine\block\Sandstone;
 use pocketmine\block\Block;
 use pocketmine\block\Air;
 
-class DropSword extends Task
+class DropParty extends Task
 {
 
     public function onRun(int $tick)
