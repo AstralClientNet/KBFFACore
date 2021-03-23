@@ -178,7 +178,7 @@ class PlayerListener implements Listener{
                         if($damager->isAlive()) {
                             $damager->getInventory()->addItem(Item::get(368, 0, 1));
                             $damager->getInventory()->addItem(Item::get(262, 0, 1));
-                            $damager->getInventory()->addItem(Item::get(30, 0, 1));
+                            $damager->getInventory()->addItem(Item::get(332, 0, 3));
                         }
                         if($damager instanceof CPlayer) Utils::updateStats($damager, 0);
                         if($p instanceof CPlayer) Utils::updateStats($p, 1);
@@ -341,7 +341,7 @@ class PlayerListener implements Listener{
     public function onPlace(BlockPlaceEvent $e){
         $p = $e->getPlayer();
         $y = $p->getFloorY();
-        if(!$e->getPlayer()->getName() == "BariPHP") {
+        if($e->getPlayer()->getGamemode() == 0) {
             if ($y > 79) {
                 $e->setCancelled();
             }
@@ -380,7 +380,7 @@ class PlayerListener implements Listener{
         $stone = Item::get(24, 0, 64);
         $enderpearl = Item::get(368, 0, 1);
         $arrow = Item::get(262, 0, 1);
-        $cob = Item::get(30, 0, 1);
+        $cob = Item::get(332, 0, 10);
         $helm = Item::get(298);
         $chest = Item::get(299);
         $pant = Item::get(300);
@@ -397,23 +397,18 @@ class PlayerListener implements Listener{
 
         //enchants
         $sharpness = Enchantment::getEnchantment(9);
-
         $prot = Enchantment::getEnchantment(0);
-
         $kb = Enchantment::getEnchantment(12);
-
         $eff = Enchantment::getEnchantment(15);
-
         $punch = Enchantment::getEnchantment(20);
 
         //enchant items
-        $sword->addEnchantment(new EnchantmentInstance($sharpness, 1));
-        $sword->addEnchantment(new EnchantmentInstance($kb, 2));
-        $bow->addEnchantment(new EnchantmentInstance($punch, 1));
-        $helm->addEnchantment(new EnchantmentInstance($prot, 1));
-        $chest->addEnchantment(new EnchantmentInstance($prot, 1));
-        $boot->addEnchantment(new EnchantmentInstance($prot, 1));
-        $pant->addEnchantment(new EnchantmentInstance($prot, 1));
+        $stick->addEnchantment(new EnchantmentInstance($kb, 1));
+        $bow->addEnchantment(new EnchantmentInstance($punch, 2));
+        $helm->addEnchantment(new EnchantmentInstance($prot, 4));
+        $chest->addEnchantment(new EnchantmentInstance($prot, 4));
+        $boot->addEnchantment(new EnchantmentInstance($prot, 4));
+        $pant->addEnchantment(new EnchantmentInstance($prot, 4));
         $pick->addEnchantment(new EnchantmentInstance($eff, 5));
 
         //set sum shit
@@ -421,20 +416,18 @@ class PlayerListener implements Listener{
         $p->setScale(1);
         $p->setGamemode(0);
         $p->setMaxHealth(20);
-        $p->getInventory()->setSize(10);
+        $p->getInventory()->setSize(30);
         $p->getInventory()->clearAll();
         $p->getArmorInventory()->clearAll();
 
         //set items
-        $p->getInventory()->setItem(0, $sword);
+        $p->getInventory()->setItem(0, $stick);
         $p->getInventory()->setItem(8, $bow);
         $p->getInventory()->setItem(2, $enderpearl);
         $p->getInventory()->setItem(5, $stone);
         $p->getInventory()->setItem(6, $arrow);
         $p->getInventory()->setItem(4, $cob);
         $p->getInventory()->setItem(1, $pick);
-
-
 
 
         //set armor inv
