@@ -370,7 +370,8 @@ class PlayerListener implements Listener{
             $ev->setCancelled();
         }
     }
-    public function setItems(Player $p){
+    public function setItems(Player $p)
+    {
 
         //get items
         $sword = Item::get(268, 0, 1);
@@ -384,11 +385,12 @@ class PlayerListener implements Listener{
         $chest = Item::get(299);
         $pant = Item::get(300);
         $boot = Item::get(301);
+        $pick = Item::get(270);
 
-        $allitems = array($sword, $stick, $bow, $stone, $enderpearl, $arrow, $cob, $helm, $chest, $pant, $boot);
+        $allitems = array($sword, $pick, $stick, $bow, $stone, $enderpearl, $arrow, $cob, $helm, $chest, $pant, $boot);
 
-        foreach($allitems as $itemz) {
-            if($itemz instanceof Durable) {
+        foreach ($allitems as $itemz) {
+            if ($itemz instanceof Durable) {
                 $itemz->setUnbreakable();
             }
         }
@@ -405,14 +407,14 @@ class PlayerListener implements Listener{
         $punch = Enchantment::getEnchantment(20);
 
         //enchant items
-
-        $stick->addEnchantment(new EnchantmentInstance($kb, 1));
         $sword->addEnchantment(new EnchantmentInstance($sharpness, 1));
+        $sword->addEnchantment(new EnchantmentInstance($kb, 2));
         $bow->addEnchantment(new EnchantmentInstance($punch, 1));
         $helm->addEnchantment(new EnchantmentInstance($prot, 1));
         $chest->addEnchantment(new EnchantmentInstance($prot, 1));
         $boot->addEnchantment(new EnchantmentInstance($prot, 1));
         $pant->addEnchantment(new EnchantmentInstance($prot, 1));
+        $pick->addEnchantment(new EnchantmentInstance($eff, 5));
 
         //set sum shit
         $p->extinguish();
@@ -425,12 +427,12 @@ class PlayerListener implements Listener{
 
         //set items
         $p->getInventory()->setItem(0, $sword);
-        $p->getInventory()->setItem(1, $stick);
         $p->getInventory()->setItem(8, $bow);
         $p->getInventory()->setItem(2, $enderpearl);
         $p->getInventory()->setItem(5, $stone);
         $p->getInventory()->setItem(6, $arrow);
         $p->getInventory()->setItem(4, $cob);
+        $p->getInventory()->setItem(1, $pick);
 
 
 
