@@ -28,6 +28,7 @@ use TheBarii\KnockbackFFA\commands\WhisperCommand;
 use TheBarii\KnockbackFFA\Handlers\DatabaseHandler;
 use TheBarii\KnockbackFFA\Handlers\ScoreboardHandler;
 use TheBarii\KnockbackFFA\Tasks\Scoreboard;
+use TheBarii\KnockbackFFA\Tasks\DropParty;
 
 
 
@@ -214,5 +215,6 @@ class Main extends PluginBase
     public function setTasks()
     {
         $this->getScheduler()->scheduleRepeatingTask(new Scoreboard($this), 20);
+        $this->getScheduler()->scheduleRepeatingTask(new DropParty($this), 6000);
     }
 }
