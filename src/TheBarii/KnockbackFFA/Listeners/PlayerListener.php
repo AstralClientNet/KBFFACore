@@ -68,7 +68,7 @@ class PlayerListener implements Listener{
         $p = $e->getPlayer();
         $n = $p->getName();
         $e->setJoinMessage("§r§d+§r§a $n");
-        $p->sendMessage("§4§l─────────────────────────────\n§r§k§5l§dl§r  §fWelcome to §bKnockback FFA!  §r§k§5l§dl§r\n§7Blocks reset every 5 seconds after you place them.\n§r§cYou cannot do anything at spawn. Go down!\n§r§71 §r§4kill §7will give you one extra §r§6arrow§7, a §rcobweb§7, §r§7and an §r§bender pearl.\n\n§7Discord: https://astralclient.net/discord/\n§l§4─────────────────────────────\n§r§l§6Teaming is not allowed!");
+        $p->sendMessage("§4§l─────────────────────────────\n§r§k§5l§dl§r  §fWelcome to §bKnockback FFA!  §r§k§5l§dl§r\n§7Blocks reset every 5 seconds after you place them.\n§r§cYou cannot do anything at spawn. Go down!\n§r§71 §r§4kill §7will give you one extra §r§6arrow§7, 3 §rsnowballs§7, §r§7and an §r§bender pearl.\n§7There are §crandom §7item drops at middle.\n\n§7Discord: https://astralclient.net/discord/\n§l§4─────────────────────────────\n§r§l§6Teaming is not allowed!");
         $this->setItems($p);
 
 
@@ -132,7 +132,7 @@ class PlayerListener implements Listener{
             $e->setFormat("§4Owner §r§5[§r§6 $n §d] §7§r$msg");
         }elseif($n == "Argued168"){
             $e->setFormat("§4Administrator §r§5[§r§6 $n §d] §7§r$msg");
-        }elseif($n == "Mo8rty22"){
+        }elseif($n == "Mo8rty"){
             $e->setFormat("§4Owner §r§5[§r§6 $n §d] §7§r$msg");
         }else{
             $e->setFormat("§r§5[§r§6 $n §d] §7§r$msg");
@@ -341,7 +341,7 @@ class PlayerListener implements Listener{
     public function onPlace(BlockPlaceEvent $e){
         $p = $e->getPlayer();
         $y = $p->getFloorY();
-        if($e->getPlayer()->getGamemode() == 0) {
+        if($p->getGamemode() == 0) {
             if ($y > 79) {
                 $e->setCancelled();
             }

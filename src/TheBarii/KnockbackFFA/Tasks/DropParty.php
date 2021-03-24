@@ -47,68 +47,68 @@ use pocketmine\block\Air;
 class DropParty extends Task
 {
 
+    public function __construct(Main $plugin){
+
+        $this->plugin = $plugin;
+
+    }
+
     public function onRun(int $tick)
     {
-        //TheSword
-        $sword = Item::get(268, 0, 1);
-        $sword->setCustomName("DaBaby");
-        $sword->setDamage(1);
-
-        //how much to gib
-        $much1 = 1;
-        $much2 = 2;
-        $much3 = 3;
-        $much4 = 4;
-        $much5 = 5;
-        $much6 = 6;
-        $much7 = 7;
-        $much8 = 8;
-        $much9 = 9;
-        $much10 = 10;
-        $much11 = 11;
-        $much12 = 12;
-        $much13 = 13;
-        $much14 = 14;
-        $much15 = 15;
 
         //compile how much
-        $howmuch = [$much1, $much2, $much3, $much4, $much5, $much6, $much7, $much8, $much9, $much10, $much11, $much12, $much13, $much14, $much15];
+        $howmuch = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
         $thefinalMuch = $howmuch[array_rand($howmuch)];
 
-
-        //items
-        $stone = Item::get(24, 0, $thefinalMuch);
-        $enderpearl = Item::get(368, 0, $thefinalMuch);
-        $arrow = Item::get(262, 0, $thefinalMuch);
-        $cob = Item::get(332, 0, $thefinalMuch);
+        //itemz
+        $enderpearl = 1;
+        $arrow = 2;
+        $cob = 3;
+        $sword = 4;
+        $bloks = 5;
 
         //compile itemz
-        $itemz = [$stone, $enderpearl, $arrow, $cob];
+        $itemz = [$enderpearl, $arrow, $bloks, $cob, $sword];
         $theFinalItem = $itemz[array_rand($itemz)];
 
-        //enchantsword!!!
-        $kb = Enchantment::getEnchantment(12);
-        $sword->addEnchantment($kb, 100);
+        //set the !!!!! ITEM!!!!!
+        if ($theFinalItem == 1) {
 
-        //pos
-        $pos1 = [240, 79, 204];
-        $pos2 = [224, 79, 188];
-        $pos3 = [249, 79, 178];
-        $pos4 = [229, 74, 155];
-        $pos5 = [264, 74, 174];
+            $theitem = Item::get(368, 0, (int)$thefinalMuch);
 
-        //Compile Pos
-        $positions = [$pos1, $pos2, $pos3, $pos4, $pos5];
-        $theFinalPos = $positions[array_rand($positions)];
+        } elseif ($theFinalItem == 2) {
+
+            $theitem = Item::get(262, 0, (int)$thefinalMuch);
+
+        } elseif ($theFinalItem == 3) {
+
+            $theitem = Item::get(332, 0, (int)$thefinalMuch);
+
+        } elseif ($theFinalItem == 4) {
+
+            $theitem = Item::get(268, 0, 1);
+            $kb = Enchantment::getEnchantment(12);
+            $theitem->addEnchantment(new EnchantmentInstance($kb, 100));
+            $theitem->setDamage(58);
+            $theitem->setCustomName("DaBaby");
+
+        } elseif ($theFinalItem == 5) {
+
+            $theitem = Item::get(24, 0, (int)$thefinalMuch);
+
+        }
+
 
         //THE DROP!!!!!!!!!!
         $level = Main::getInstance()->getServer()->getLevelByName("kbstick1");
-        $pos = new Vector3($theFinalPos);
-        $level->dropItem($theFinalItem, $pos);
+        $pos = new Vector3(251, 76, 176);
+        $level->dropItem($pos, $theitem);
 
         //yusz
-        Main::getInstance()->getServer()->broadcastMessage("§kll §r§7Item(s) with the amount of §c$thefinalMuch §7at these coordinates §c$theFinalPos §7has been spawned! §kll");
-
-
+        if (!$theFinalItem == 4) {
+            Main::getInstance()->getServer()->broadcastMessage("§kll§r  §7Item(s) with the amount of §c" . (int)$thefinalMuch . " §7has been spawned at middle!  §r§kll");
+        }else{
+            Main::getInstance()->getServer()->broadcastMessage("§kll§r  §7Item(s) with the amount of §c1 §7has been spawned at middle!  §r§kll");
+        }
     }
 }
