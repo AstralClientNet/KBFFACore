@@ -57,8 +57,8 @@ class DropParty extends Task
     {
 
         //compile how much
-        $howmuch = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-        $thefinalMuch = $howmuch[array_rand($howmuch)];
+
+        $thefinalMuch = rand(1, 15);
 
 
         $theFinalItem = rand(1, 5);
@@ -79,7 +79,7 @@ class DropParty extends Task
         } elseif ($theFinalItem == 5) {
 
             $theitem = Item::get(268, 0, 1);
-            $kb = Enchantment::getEnchantment(12);
+            $kb = Enchantment::getEnchantment(9);
             $theitem->addEnchantment(new EnchantmentInstance($kb, 100));
             $theitem->setDamage(59);
             $theitem->setCustomName("DaBaby");
