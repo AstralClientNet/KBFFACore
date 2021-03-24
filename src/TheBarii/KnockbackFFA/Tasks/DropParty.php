@@ -60,16 +60,8 @@ class DropParty extends Task
         $howmuch = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
         $thefinalMuch = $howmuch[array_rand($howmuch)];
 
-        //itemz
-        $enderpearl = 1;
-        $arrow = 2;
-        $cob = 3;
-        $sword = 4;
-        $bloks = 5;
 
-        //compile itemz
-        $itemz = [$enderpearl, $arrow, $bloks, $cob, $sword];
-        $theFinalItem = $itemz[array_rand($itemz)];
+        $theFinalItem = rand(1, 5);
 
         //set the !!!!! ITEM!!!!!
         if ($theFinalItem == 1) {
@@ -84,15 +76,15 @@ class DropParty extends Task
 
             $theitem = Item::get(332, 0, (int)$thefinalMuch);
 
-        } elseif ($theFinalItem == 4) {
+        } elseif ($theFinalItem == 5) {
 
             $theitem = Item::get(268, 0, 1);
             $kb = Enchantment::getEnchantment(12);
             $theitem->addEnchantment(new EnchantmentInstance($kb, 100));
-            $theitem->setDamage(58);
+            $theitem->setDamage(59);
             $theitem->setCustomName("DaBaby");
 
-        } elseif ($theFinalItem == 5) {
+        } elseif ($theFinalItem == 4) {
 
             $theitem = Item::get(24, 0, (int)$thefinalMuch);
 
@@ -105,10 +97,6 @@ class DropParty extends Task
         $level->dropItem($pos, $theitem);
 
         //yusz
-        if (!$theFinalItem == 4) {
             Main::getInstance()->getServer()->broadcastMessage("§kll§r  §7Item(s) with the amount of §c" . (int)$thefinalMuch . " §7has been spawned at middle!  §r§kll");
-        }else{
-            Main::getInstance()->getServer()->broadcastMessage("§kll§r  §7Item(s) with the amount of §c1 §7has been spawned at middle!  §r§kll");
-        }
     }
 }
