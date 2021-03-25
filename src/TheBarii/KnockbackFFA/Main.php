@@ -29,7 +29,7 @@ use TheBarii\KnockbackFFA\Handlers\DatabaseHandler;
 use TheBarii\KnockbackFFA\Handlers\ScoreboardHandler;
 use TheBarii\KnockbackFFA\Tasks\Scoreboard;
 use TheBarii\KnockbackFFA\Tasks\DropParty;
-
+use TheBarii\KnockbackFFA\Tasks\Generator;
 
 
 class Main extends PluginBase
@@ -41,6 +41,8 @@ class Main extends PluginBase
     private static $databaseHandler;
     public $text;
     public $text2;
+    public $text3;
+    public $text4;
 
 
     public function onEnable(): void
@@ -55,11 +57,15 @@ class Main extends PluginBase
         $this->setHandlers();
         $this->loadUpdatingFloatingTexts();
         $this->loadUpdatingFloatingTexts2();
+        $this->loadUpdatingFloatingTexts3();
+        $this->loadUpdatingFloatingTexts4();
         $this->setTasks();
         $this->db = @mkdir($this->getDataFolder() . "kb.db");
         $this->main = new\SQLite3($this->getDataFolder() . "kb.db");
         $this->text = new FloatingTextParticle(new Vector3(242, 90, 182), "", "");
         $this->text2 = new FloatingTextParticle(new Vector3(244, 90, 184), "", "");
+        $this->text3 = new FloatingTextParticle(new Vector3(240, 70, 204), "", "");
+        $this->text4 = new FloatingTextParticle(new Vector3(240, 70, 204), "", "");
         $this->main = new\SQLite3($this->getDataFolder() . "kb.db");
 
         $this->main->exec("CREATE TABLE IF NOT EXISTS rank (player TEXT PRIMARY KEY, rank TEXT);");
@@ -101,6 +107,30 @@ class Main extends PluginBase
             $this->text->sendToAll();
         }
     }
+
+    public function loadUpdatingFloatingTexts3(): void
+    {
+        foreach ($this->getServer()->getOnlinePlayers() as $player) {
+            $title3 = "§5§lGenerator";
+            $this->text3->setTitle($title3);
+            $level = $this->getServer()->getLevelByName("kbstick1");
+            $level->addParticle($this->text3);
+            $this->text3->sendToAll();
+        }
+    }
+
+    public function loadUpdatingFloatingTexts4(): void
+    {
+        foreach ($this->getServer()->getOnlinePlayers() as $player) {
+            $title4 = "§5§lGenerator";
+            $this->text4->setTitle($title4);
+            $level = $this->getServer()->getLevelByName("kbstick1");
+            $level->addParticle($this->text4);
+            $this->text4->sendToAll();
+        }
+    }
+
+
 
     public static function getInstance(): Main
     {
@@ -216,5 +246,6 @@ class Main extends PluginBase
     {
         $this->getScheduler()->scheduleRepeatingTask(new Scoreboard($this), 20);
         $this->getScheduler()->scheduleRepeatingTask(new DropParty($this), mt_rand(1200, 3600));
+        $this->getScheduler()->scheduleRepeatingTask(new Scoreboard($this), mt_rand(100 , 200));
     }
 }
