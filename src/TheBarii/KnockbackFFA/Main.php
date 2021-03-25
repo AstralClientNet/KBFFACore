@@ -246,6 +246,6 @@ class Main extends PluginBase
     {
         $this->getScheduler()->scheduleRepeatingTask(new Scoreboard($this), 20);
         $this->getScheduler()->scheduleRepeatingTask(new DropParty($this), mt_rand(1200, 3600));
-        $this->getScheduler()->scheduleRepeatingTask(new Scoreboard($this), mt_rand(100 , 200));
+        $this->getScheduler()->scheduleRepeatingTask(new Generator($this), mt_rand(100 , 200));
     }
 }

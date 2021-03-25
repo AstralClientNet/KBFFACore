@@ -53,7 +53,7 @@ class PlayerListener implements Listener{
         $this->plugin=$plugin;
         $this->text = new FloatingTextParticle(new Vector3(242, 90, 182), "", "");
         $this->text2 = new FloatingTextParticle(new Vector3(244, 90, 184), "", "");
-        $this->text3 = new FloatingTextParticle(new Vector3(240, 70, 204), "", "");
+        $this->text3 = new FloatingTextParticle(new Vector3(224, 69, 189), "", "");
         $this->text4 = new FloatingTextParticle(new Vector3(240, 70, 204), "", "");
     }
     /**
@@ -84,8 +84,8 @@ class PlayerListener implements Listener{
             $this->plugin->getScoreboardHandler()->scoreboard($this);
             $this->loadUpdatingFloatingTexts($p);
             $this->loadUpdatingFloatingTexts2($p);
-        $this->loadUpdatingFloatingTexts3($p);
-        $this->loadUpdatingFloatingTexts4($p);
+            $this->loadUpdatingFloatingTexts3($p);
+            $this->loadUpdatingFloatingTexts4($p);
     }
 
     public function onPreLogin(PlayerPreLoginEvent $event)
@@ -125,9 +125,8 @@ class PlayerListener implements Listener{
     {
             $title3 = "§5§lGenerator";
             $this->text3->setTitle($title3);
-            $level = $this->getServer()->getLevelByName("kbstick1");
+            $level = $this->plugin->getServer()->getLevelByName("kbstick1");
             $level->addParticle($this->text3);
-            $this->text3->sendToAll();
     }
 
     public function loadUpdatingFloatingTexts4(Player $player): void
@@ -135,10 +134,8 @@ class PlayerListener implements Listener{
 
             $title4 = "§5§lGenerator";
             $this->text4->setTitle($title4);
-            $level = $this->getServer()->getLevelByName("kbstick1");
+            $level = $this->plugin->getServer()->getLevelByName("kbstick1");
             $level->addParticle($this->text4);
-            $this->text4->sendToAll();
-
     }
 
     /**
@@ -434,6 +431,7 @@ class PlayerListener implements Listener{
         $boot->addEnchantment(new EnchantmentInstance($prot, 4));
         $pant->addEnchantment(new EnchantmentInstance($prot, 4));
         $pick->addEnchantment(new EnchantmentInstance($eff, 5));
+        $pick->addEnchantment(new EnchantmentInstance($sharpness, 2));
 
         //set sum shit
         $p->extinguish();
