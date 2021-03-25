@@ -88,6 +88,12 @@ class PlayerListener implements Listener{
             $this->loadUpdatingFloatingTexts4($p);
     }
 
+    public function YouDied(Player $player, string $what){
+
+        $player->addTitle("§c§lYOU DIED!");
+
+    }
+
     public function onPreLogin(PlayerPreLoginEvent $event)
     {
         $player = $event->getPlayer();
