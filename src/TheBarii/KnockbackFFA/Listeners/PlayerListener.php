@@ -53,7 +53,7 @@ class PlayerListener implements Listener{
         $this->plugin=$plugin;
         $this->text = new FloatingTextParticle(new Vector3(242, 90, 182), "", "");
         $this->text2 = new FloatingTextParticle(new Vector3(244, 90, 184), "", "");
-        $this->text3 = new FloatingTextParticle(new Vector3(224, 69, 189), "", "");
+        $this->text3 = new FloatingTextParticle(new Vector3(224, 71, 189), "", "");
         $this->text4 = new FloatingTextParticle(new Vector3(240, 70, 204), "", "");
     }
     /**
@@ -437,7 +437,7 @@ class PlayerListener implements Listener{
         $boot->addEnchantment(new EnchantmentInstance($prot, 4));
         $pant->addEnchantment(new EnchantmentInstance($prot, 4));
         $pick->addEnchantment(new EnchantmentInstance($eff, 5));
-        $pick->addEnchantment(new EnchantmentInstance($sharpness, 2));
+        $pick->addEnchantment(new EnchantmentInstance($sharpness, 6));
 
         //set sum shit
         $p->extinguish();

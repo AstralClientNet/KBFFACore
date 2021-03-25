@@ -64,7 +64,7 @@ class Main extends PluginBase
         $this->main = new\SQLite3($this->getDataFolder() . "kb.db");
         $this->text = new FloatingTextParticle(new Vector3(242, 90, 182), "", "");
         $this->text2 = new FloatingTextParticle(new Vector3(244, 90, 184), "", "");
-        $this->text3 = new FloatingTextParticle(new Vector3(240, 70, 204), "", "");
+        $this->text3 = new FloatingTextParticle(new Vector3(240, 71, 204), "", "");
         $this->text4 = new FloatingTextParticle(new Vector3(240, 70, 204), "", "");
         $this->main = new\SQLite3($this->getDataFolder() . "kb.db");
 
