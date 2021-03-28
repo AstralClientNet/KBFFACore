@@ -80,7 +80,7 @@ class DropParty extends Task
 
             $theitem = Item::get(268, 0, 1);
             $kb = Enchantment::getEnchantment(9);
-            $theitem->addEnchantment(new EnchantmentInstance($kb, 100));
+            $theitem->addEnchantment(new EnchantmentInstance($kb, 32000));
             $theitem->setDamage(59);
             $theitem->setCustomName("DaBaby");
 
