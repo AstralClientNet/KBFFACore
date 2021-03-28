@@ -10,6 +10,7 @@ use pocketmine\network\mcpe\protocol\LevelEventPacket;
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 use pocketmine\network\mcpe\protocol\PlaySoundPacket;
 use pocketmine\Server;
+use pocketmine\event\player\PlayerChangeSkinEvent;
 use pocketmine\level\particle\FloatingTextParticle;
 use pocketmine\item\Item;
 use pocketmine\event\player\PlayerInteractEvent;
@@ -86,6 +87,16 @@ class PlayerListener implements Listener{
             $this->loadUpdatingFloatingTexts2($p);
             $this->loadUpdatingFloatingTexts3($p);
             $this->loadUpdatingFloatingTexts4($p);
+    }
+
+    /**
+     * @priority HIGHEST
+     */
+    public function onChangeSkin(PlayerChangeSkinEvent $event){
+        $player = $event->getPlayer();
+        $player->sendMessage("Unfortunately, you cannot change your skin here.");
+        $event->setCancelled();
+
     }
 
     public function YouDied(Player $player, string $what){
