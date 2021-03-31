@@ -66,14 +66,22 @@ class Scoreboard extends Task
         $ks = $this->plugin->getDatabaseHandler()->getKillstreak($player->getName());
         $k = $this->plugin->getDatabaseHandler()->getKills($player->getName());
         $bks = Main::getInstance()->getDatabaseHandler()->getBestKillstreak($player);
-        $this->lineTitle($player, "  " . "§bKnockback FFA ");
         $online = count($this->plugin->getServer()->getOnlinePlayers());
-        $this->lineCreate($player, 1, ("§r§r§r§r§r§r§r§r--------------------"));
-        $this->lineCreate($player, 2, "§cOnline: $online");
-        $this->lineCreate($player, 3, "Your killstreak: §b$ks");
-        $this->lineCreate($player, 4, "Best killstreak: §c$bks");
-        $this->lineCreate($player, 5, "§r§r§r§r§r§r§r§r--------------------");
-        $this->lineCreate($player, 6, "Your kills: §7$k ");
+
+        $this->lineTitle($player, "  "."§r§d§lKNOCKBACK FFA§r ");
+
+        $this->lineCreate($player, 1, ("§r§r§r§r§r§r§r§7-------------------"));
+
+        $this->lineCreate($player, 2, "§dOnline: §f$online");
+        $this->lineCreate($player, 3, "§r");
+        $this->lineCreate($player, 4, "§dKillstreak: §f$ks");
+        $this->lineCreate($player, 5, "§dBest Killstreak: §f$bks");
+        $this->lineCreate($player, 6, "§dKills: §f$k ");
+        $this->lineCreate($player, 7, "§r");
+        $this->lineCreate($player, 8, "§o§dpvp.astralclient.net§r");
+
+        $this->lineCreate($player, 9, "§r§r§r§r§r§r§r§r§7-------------------");
+
         $this->scoreboard[$player->getName()] = $player->getName();
         $this->main[$player->getName()] = $player->getName();
 

@@ -70,9 +70,27 @@ class PlayerListener implements Listener{
 
         $p = $e->getPlayer();
         $n = $p->getName();
-        $e->setJoinMessage("§r§d+§r§a $n");
-        $p->sendMessage("§4§l─────────────────────────────\n§r§k§5l§dl§r  §fWelcome to §bKnockback FFA!  §r§k§5l§dl§r\n§7Blocks reset every 5 seconds after you place them.\n§r§cYou cannot do anything at spawn. Go down!\n§r§71 §r§4kill §7will give you one extra §r§6arrow§7, 3 §rsnowballs§7, §r§7and an §r§bender pearl.\n§7Generators can generate random inventory items anywhere from 5-10 seconds. Only one item.\n§7There are §crandom §7item drops at middle.\n\n§7Discord: https://astralclient.net/discord/\n§l§4─────────────────────────────\n§r§l§6Teaming is not allowed!");
-        $this->setItems($p);
+
+        $e->setJoinMessage("§r§8[§a+§8] §a".$p->getName());
+
+        $p->sendMessage("§r✅§7----------------------------------------");
+        $p->sendMessage("§r");
+        $p->sendMessage("§r✅§d§lAstral Network§r");
+        $p->sendMessage("§r");
+        $p->sendMessage("§r✅§fWelcome to Astral Knockback FFA");
+        $p->sendMessage("§r");
+        $p->sendMessage("§r✅§7» Blocks reset every 5 seconds after you place them!");
+        $p->sendMessage("§r✅§7» To PvP, drop down in the arena!!");
+        $p->sendMessage("§r✅§7» Each kill will give you one extra arrow, three snowballs and an ender pearl!");
+        $p->sendMessage("§r✅§7» Generators will drop random inventory items anywhere from 5 to 10 seconds!");
+        $p->sendMessage("§r✅§7» There are random item drops at middle too!");
+        $p->sendMessage("§r✅§7» §c§lTeaming is not allowed and will result in a Ban!§r");
+        $p->sendMessage("§r");
+        $p->sendMessage("§r✅§7» Website: astralclient.net");
+        $p->sendMessage("§r✅§7» Discord: astralclient.net/discord");
+        $p->sendMessage("§r✅§7» Store: store.astralclient.net");
+        $p->sendMessage("§r");
+        $p->sendMessage("§r✅§7----------------------------------------");
 
 
         $x = 244;
@@ -164,16 +182,20 @@ class PlayerListener implements Listener{
         $p = $e->getPlayer();
         $n = $p->getName();
         $msg = $e->getMessage();
+        $k = $this->plugin->getDatabaseHandler()->getKills($p->getName());
+
         if(!$n == "TheBarii") {
-            $e->setFormat("§5[§r§6 $n §d] §7§r$msg");
+            $e->setFormat("§7[$k]§r §f".$n."§7: $msg");
         }elseif($n == "TheBarii"){
-            $e->setFormat("§4Owner §r§5[§r§6 $n §d] §7§r$msg");
+            $e->setFormat("§l§4[$k]§r §4§l[Owner] ".$n."§r§f: §c$msg");
         }elseif($n == "Argued168"){
-            $e->setFormat("§4Administrator §r§5[§r§6 $n §d] §7§r$msg");
+            $e->setFormat("§4[$k]§r §4[Admin] ".$n."§r§f: §e$msg");
         }elseif($n == "Mo8rty"){
-            $e->setFormat("§4Owner §r§5[§r§6 $n §d] §7§r$msg");
+            $e->setFormat("§l§4[$k]§r §4§l[Owner] ".$n."§r§f: §c$msg");
+        }elseif($n == "DidntPot"){
+            $e->setFormat("§b[$k]§r §r§f§b[§r§l§5§k||§r§bDeveloper§r§l§5§k||§r§b] ".$n."§f: §e$msg");
         }else{
-            $e->setFormat("§r§5[§r§6 $n §d] §7§r$msg");
+            $e->setFormat("§7[$k]§r §f".$n."§7: $msg");
         }
     }
     /**
@@ -186,7 +208,9 @@ class PlayerListener implements Listener{
 
         $p = $e->getPlayer();
         $n = $p->getName();
-        $e->setQuitMessage("§r§c-§r§c $n");
+        $reason = $e->getQuitReason();
+
+        $e->setQuitMessage("§r§8[§c-§8] §c".$p->getName());
     }
 
     /**
@@ -221,7 +245,7 @@ class PlayerListener implements Listener{
                         if($damager instanceof CPlayer) Utils::updateStats($damager, 0);
                         if($p instanceof CPlayer) Utils::updateStats($p, 1);
                         $messages = ["quickied", "railed", "clapped", "killed", "smashed", "OwOed", "UwUed", "sent to the heavens"];
-                        $dm = "§e$pn §7was " . $messages[array_rand($messages)] . " by §c$dn §7[" . $finalhealth . " HP]";
+                        $dm = "§r§7» §c".$pn." §7was ".$messages[array_rand($messages)]." by §a".$dn." §8[§7".$finalhealth." §cHP§8]§r";
                         if($damager->isAlive()) {
                             $damager->setHealth($damager->getMaxHealth());
                         }
@@ -229,7 +253,7 @@ class PlayerListener implements Listener{
                         $e->setDeathMessage($dm);
                     }
                     if(Main::getInstance()->getDatabaseHandler()->getKillstreak($damager) >= 5){
-                        $this->plugin->getServer()->broadcastMessage("§c".$damager->getName()." §7just got a killstreak of §6".Main::getInstance()->getDatabaseHandler()->getKillstreak($damager)."!");
+                        $this->plugin->getServer()->broadcastMessage("§c» ".$damager->getName()." §7just got a killstreak of §6".Main::getInstance()->getDatabaseHandler()->getKillstreak($damager)."!");
                     }
 
                 }
