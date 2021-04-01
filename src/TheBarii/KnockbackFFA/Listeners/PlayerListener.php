@@ -100,6 +100,7 @@ class PlayerListener implements Listener{
 
         $level = $this->plugin->getServer()->getLevelByName("kbstick1");
         $p->teleport(new Vector3($x, $y, $z, 0, 0, $level));
+        $this->setItems($p);
 
             $this->plugin->getScoreboardHandler()->scoreboard($this);
             $this->loadUpdatingFloatingTexts($p);
@@ -230,20 +231,6 @@ class PlayerListener implements Listener{
 
     }
 
-    /**
-     * @priority HIGHEST
-     */
-    public function onHit(EntityDamageByEntityEvent $e){
-        $p = $e->getEntity();
-        if($e->getDamager() instanceof Player) {
-            $player = $e->getDamager();
-            $p->setTagged($player);
-        }
-        $y = $p->getFloorY();
-        if($y > 79) {
-            $e->setCancelled();
-        }
-    }
 
     /**
      * @priority HIGHEST
@@ -260,12 +247,12 @@ class PlayerListener implements Listener{
             $level = $this->plugin->getServer()->getLevelByName("kbstick1");
             $p->teleport(new Vector3($x, $y, $z, 0, 0, $level));
             $p->setGamemode(3);
-            $this->getScheduler()->scheduleTask(new Countdown(5, $p));
-            $this->getScheduler()->scheduleDelayedTask(new Countdown(4, $p), 20);
-            $this->getScheduler()->scheduleDelayedTask(new Countdown(3, $p), 40);
-            $this->getScheduler()->scheduleDelayedTask(new Countdown(2, $p), 60);
-            $this->getScheduler()->scheduleDelayedTask(new Countdown(1, $p), 80);
-            $this->getScheduler()->scheduleDelayedTask(new Countdown(0, $p), 100);
+            $this->plugin->getScheduler()->scheduleTask(new Countdown(5, $p));
+            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(4, $p), 20);
+            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(3, $p), 40);
+            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(2, $p), 60);
+            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(1, $p), 80);
+            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(0, $p), 100);
 
             if($p instanceof CPlayer) Utils::updateStats($p, 1);
             $title = "§5§lTop Killstreaks §c§lLeaderboard";
@@ -306,20 +293,19 @@ class PlayerListener implements Listener{
 
                     $dn = $whoTagged->getName();
                     if ($p instanceof CPlayer) Utils::updateStats($p, 1);
+
                     $finalhealth = round($whoTagged->getHealth(), 1);
                     $messages = ["quickied", "railed", "clapped", "killed", "smashed", "OwOed", "UwUed", "sent to the heavens"];
                     $dm = "§r§7» §c" . $p->getName() . " §7was " . $messages[array_rand($messages)] . " by §a" . $dn . " §8[§7" . $finalhealth . " §cHP§8]§r";
 
                     foreach ($this->plugin->getServer()->getOnlinePlayers() as $online) {
-                        $online->sendMessage("$dm");
+                        $online->sendMessage($dm);
                     }
 
                 if(Main::getInstance()->getDatabaseHandler()->getKillstreak($whoTagged) >= 5) {
                     $this->plugin->getServer()->broadcastMessage("§c» " . $whoTagged->getName() . " §7just got a killstreak of §6" . Main::getInstance()->getDatabaseHandler()->getKillstreak($whoTagged) . "!");
                  }
-
                 $p->setTagged(null);
-
                }
             }
           }
