@@ -54,8 +54,10 @@ class CPlayer extends Player{
 
     public function setTagged($player){
 
-        $tag=$player;
-        $this->tag=($tag!=null ? $tag->getName():"");
+        if(!$player == null) {
+            $tag = $player;
+            $this->tag = ($tag != null ? $tag->getName() : "");
+        }
 
     }
 
