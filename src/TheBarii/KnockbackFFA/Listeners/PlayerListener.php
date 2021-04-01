@@ -297,7 +297,6 @@ class PlayerListener implements Listener{
                         $whoTagged->getInventory()->addItem(Item::get(262, 0, 1));
                         $whoTagged->setHealth($whoTagged->getMaxHealth());
                         $this->levelupSound($whoTagged);
-
                     }
                 }
 
@@ -318,6 +317,9 @@ class PlayerListener implements Listener{
                 if(Main::getInstance()->getDatabaseHandler()->getKillstreak($whoTagged) >= 5) {
                     $this->plugin->getServer()->broadcastMessage("§c» " . $whoTagged->getName() . " §7just got a killstreak of §6" . Main::getInstance()->getDatabaseHandler()->getKillstreak($whoTagged) . "!");
                  }
+
+                $p->setTagged(null);
+
                }
             }
           }

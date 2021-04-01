@@ -57,6 +57,8 @@ class CPlayer extends Player{
         if(!$player == null) {
             $tag = $player;
             $this->tag = ($tag != null ? $tag->getName() : "");
+        }else{
+            $this->tag = null;
         }
 
     }
