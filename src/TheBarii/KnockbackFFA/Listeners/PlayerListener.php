@@ -46,6 +46,7 @@ use pocketmine\event\entity\EntityShootBowEvent;
 use TheBarii\KnockbackFFA\Utils;
 use pocketmine\item\Durable;
 use TheBarii\KnockbackFFA\Tasks\Countdown;
+use TheBarii\KnockbackFFA\Sounds\Sounds;
 
 
 class PlayerListener implements Listener{
@@ -64,6 +65,26 @@ class PlayerListener implements Listener{
     function onCreation(PlayerCreationEvent $event){
         $event->setPlayerClass(CPlayer::class);
     }
+
+    /**
+     * @priority HIGHEST
+     */
+    public function onHit(EntityDamageByEntityEvent $e){
+        $p = $e->getEntity();
+        if($e->getDamager() instanceof Player) {
+            $player = $e->getDamager();
+            $y = $player->getFloorY();
+            if(!$y > 79) {
+                $p->setTagged($player);
+            }
+        }
+        $y = $p->getFloorY();
+        if($y > 79) {
+            $e->setCancelled();
+            Sounds::cantHit($player);
+        }
+    }
+
     /**
      * @priority HIGHEST
      */
@@ -107,6 +128,10 @@ class PlayerListener implements Listener{
             $this->loadUpdatingFloatingTexts2($p);
             $this->loadUpdatingFloatingTexts3($p);
             $this->loadUpdatingFloatingTexts4($p);
+
+            foreach ($this->plugin->getServer()->getOnlinePlayers() as $all){
+                Sounds::spawnSound($all);
+            }
     }
 
     /**
@@ -235,26 +260,37 @@ class PlayerListener implements Listener{
     /**
      * @priority HIGHEST
      */
-    public function onMove(PlayerMoveEvent $e){
+    public function onMove(PlayerMoveEvent $e)
+    {
         $p = $e->getPlayer();
         $y = $p->getFloorY();
-        if($y < 45){
+        if ($y < 45) {
+            $this->respawnSystem($p);
+            Sounds::deathSound($p);
+        }
+    }
 
-            $x = 244;
-            $y = 88;
-            $z = 182;
 
-            $level = $this->plugin->getServer()->getLevelByName("kbstick1");
-            $p->teleport(new Vector3($x, $y, $z, 0, 0, $level));
+
+    public function respawnSystem($p){
+
+        $x = 244;
+        $y = 88;
+        $z = 182;
+
+        if ($p instanceof CPlayer) Utils::updateStats($p, 1);
+        if($p instanceof  Player) {
+        $level = $this->plugin->getServer()->getLevelByName("kbstick1");
+        $p->teleport(new Vector3($x, $y, $z, 0, 0, $level));
+
             $p->setGamemode(3);
-            $this->plugin->getScheduler()->scheduleTask(new Countdown(5, $p));
-            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(4, $p), 20);
-            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(3, $p), 40);
-            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(2, $p), 60);
-            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(1, $p), 80);
-            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(0, $p), 100);
+            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(5, $p), 20);
+            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(4, $p), 40);
+            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(3, $p), 60);
+            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(2, $p), 80);
+            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(1, $p), 90);
+            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(0, $p), 110);
 
-            if($p instanceof CPlayer) Utils::updateStats($p, 1);
             $title = "§5§lTop Killstreaks §c§lLeaderboard";
             $ks = $this->plugin->getDatabaseHandler()->topKillstreaks($p->getName());
 
@@ -274,41 +310,41 @@ class PlayerListener implements Listener{
 
             $this->plugin->getScoreboardHandler()->scoreboard($this);
 
-
-            if($p->hasTagged()) {
+            if ($p->hasTagged()) {
                 $whoTagged = $p->getTagged();
+                $whoTagged->getInventory()->addItem(Item::get(368, 0, 1));
+                $whoTagged->getInventory()->addItem(Item::get(262, 0, 1));
+                $whoTagged->setHealth($whoTagged->getMaxHealth());
+                Sounds::levelupSound($whoTagged);
+                if ($whoTagged instanceof CPlayer) Utils::updateStats($whoTagged, 0);
+                $dn = $whoTagged->getName();
 
-                if ($whoTagged->isAlive()) {
-                    if (!$whoTagged->getName() == $p->getName()) {
-                        $whoTagged->getInventory()->addItem(Item::get(368, 0, 1));
-                        $whoTagged->getInventory()->addItem(Item::get(262, 0, 1));
-                        $whoTagged->setHealth($whoTagged->getMaxHealth());
-                        $this->levelupSound($whoTagged);
-                    }
+                $finalhealth = round($whoTagged->getHealth(), 1);
+                $messages = ["quickied", "railed", "clapped", "killed", "smashed", "OwOed", "UwUed", "sent to the heavens"];
+                $dm = "§r§7» §c" . $p->getName() . " §7was " . $messages[array_rand($messages)] . " by §a" . $dn . " §8[§7" . $finalhealth . " §cHP§8]§r";
+
+                foreach ($this->plugin->getServer()->getOnlinePlayers() as $online) {
+                    $online->sendMessage($dm);
                 }
 
-                if (!$whoTagged->getName() == $p->getName()) {
-                    if ($whoTagged instanceof CPlayer) Utils::updateStats($whoTagged, 0);
-                }
-
-                    $dn = $whoTagged->getName();
-                    if ($p instanceof CPlayer) Utils::updateStats($p, 1);
-
-                    $finalhealth = round($whoTagged->getHealth(), 1);
-                    $messages = ["quickied", "railed", "clapped", "killed", "smashed", "OwOed", "UwUed", "sent to the heavens"];
-                    $dm = "§r§7» §c" . $p->getName() . " §7was " . $messages[array_rand($messages)] . " by §a" . $dn . " §8[§7" . $finalhealth . " §cHP§8]§r";
-
-                    foreach ($this->plugin->getServer()->getOnlinePlayers() as $online) {
-                        $online->sendMessage($dm);
-                    }
-
-                if(Main::getInstance()->getDatabaseHandler()->getKillstreak($whoTagged) >= 5) {
+                if (Main::getInstance()->getDatabaseHandler()->getKillstreak($whoTagged) >= 5) {
                     $this->plugin->getServer()->broadcastMessage("§c» " . $whoTagged->getName() . " §7just got a killstreak of §6" . Main::getInstance()->getDatabaseHandler()->getKillstreak($whoTagged) . "!");
-                 }
-                $p->setTagged(null);
-               }
+                }
             }
-          }
+        }
+    }
+
+    /**
+     * @priority HIGHEST
+     */
+
+    public function onDeath(EntityDamageEvent $e){
+        $victim = $e->getEntity();
+        if($e->getFinalDamage() >= $victim->getHealth()) {
+            $e->setCancelled();
+            $this->respawnSystem($victim);
+        }
+    }
 
     /**
      * @priority HIGHEST
@@ -328,6 +364,7 @@ class PlayerListener implements Listener{
         $y = $p->getFloorY();
         if($y > 79) {
             $e->setCancelled();
+            Sounds::cancelSound($p);
         }
     }
     /**
@@ -338,6 +375,7 @@ class PlayerListener implements Listener{
         $y = $p->getFloorY();
         if($y > 79){
             $e->setCancelled();
+            Sounds::cancelSound($p);
         }
     }
     /**
@@ -348,6 +386,7 @@ class PlayerListener implements Listener{
         $y = $p->getFloorY();
         if($y > 79){
             $e->setCancelled();
+            Sounds::cancelSound($p);
         }
     }
     /**
@@ -356,9 +395,10 @@ class PlayerListener implements Listener{
     public function onPlace(BlockPlaceEvent $e){
         $p = $e->getPlayer();
         $y = $p->getFloorY();
-        if($p->getGamemode() == 0) {
+        if($p->getGamemode() == 0){
             if ($y > 79) {
                 $e->setCancelled();
+                Sounds::cancelSound($p);
             }
         }
     }
@@ -369,7 +409,6 @@ class PlayerListener implements Listener{
     public function onRespawn(PlayerRespawnEvent $e){
         $p = $e->getPlayer();
         $this->setItems($p);
-        $p->setTagged(null);
     }
     /**
      * @priority LOWEST
@@ -432,6 +471,7 @@ class PlayerListener implements Listener{
         $p->setScale(1);
         $p->setGamemode(0);
         $p->setMaxHealth(20);
+        $p->setHealth(20);
         $p->getInventory()->setSize(30);
         $p->getInventory()->clearAll();
         $p->getArmorInventory()->clearAll();

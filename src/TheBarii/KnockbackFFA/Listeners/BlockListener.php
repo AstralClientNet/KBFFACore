@@ -7,7 +7,7 @@ namespace TheBarii\KnockbackFFA\Listeners;
 use pocketmine\event\Listener;
 use pocketmine\Player;
 use pocketmine\Server;
-
+use TheBarii\KnockbackFFA\Sounds\Sounds;
 use pocketmine\item\Item;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\math\Vector3;
@@ -57,6 +57,7 @@ class BlockListener implements Listener{
         if($blockID == 168 or $blockID == 209 or $blockID == 181 or $blockID == 182 or $blockID == 44 or $blockID == 102 or $blockID == 89) {
             if ($e->getPlayer()->getGamemode() == 0) {
                 $e->setCancelled();
+                Sounds::cancelSound($e->getPlayer());
             }
         }
     }

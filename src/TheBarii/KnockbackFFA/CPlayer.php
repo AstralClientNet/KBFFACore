@@ -53,18 +53,16 @@ class CPlayer extends Player{
     }
 
     public function setTagged($player){
-
         if(!$player == null) {
             $tag = $player;
             $this->tag = ($tag != null ? $tag->getName() : "");
         }else{
             $this->tag = null;
         }
-
     }
 
     public function hasTagged():bool{
-        if($this->re===null) return false;
+        if($this->tag===null) return false;
         $tag=$this->getTagged();
         if($tag===null) return false;
         $player=$this->getTagged();
