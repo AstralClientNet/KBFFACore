@@ -71,17 +71,38 @@ class PlayerListener implements Listener{
      */
     public function onHit(EntityDamageByEntityEvent $e){
         $p = $e->getEntity();
-        if($e->getDamager() instanceof Player) {
+
             $player = $e->getDamager();
-            $y = $player->getFloorY();
-            if(!$y > 79) {
-                $p->setTagged($player);
+            $y = $p->getFloorY();
+
+
+            if ($y > 79) {
+                $e->setCancelled();
+                Sounds::cantHit($player);
             }
         }
-        $y = $p->getFloorY();
-        if($y > 79) {
-            $e->setCancelled();
-            Sounds::cantHit($player);
+
+        public function Tagger(EntityDamageByEntityEvent $e){
+
+            $p = $e->getEntity();
+
+            $player = $e->getDamager();
+
+            $p->setTagged($player);
+        }
+
+    /**
+     * @priority HIGHEST
+     */
+
+    public function onDeath(EntityDamageEvent $e){
+        $victim = $e->getEntity();
+        if($victim instanceof Player) {
+            if($victim->isOnline()) {
+                if ($e->getFinalDamage() >= $victim->getHealth()) {
+                    $this->respawnSystem($victim);
+                }
+            }
         }
     }
 
@@ -263,10 +284,14 @@ class PlayerListener implements Listener{
     public function onMove(PlayerMoveEvent $e)
     {
         $p = $e->getPlayer();
-        $y = $p->getFloorY();
-        if ($y < 45) {
-            $this->respawnSystem($p);
-            Sounds::deathSound($p);
+        if($p->isOnline()) {
+            $y = $p->getFloorY();
+            if ($y < 45) {
+                if ($p->getGamemode() == 0) {
+                    $this->respawnSystem($p);
+                    Sounds::deathSound($p);
+                }
+            }
         }
     }
 
@@ -334,17 +359,6 @@ class PlayerListener implements Listener{
         }
     }
 
-    /**
-     * @priority HIGHEST
-     */
-
-    public function onDeath(EntityDamageEvent $e){
-        $victim = $e->getEntity();
-        if($e->getFinalDamage() >= $victim->getHealth()) {
-            $e->setCancelled();
-            $this->respawnSystem($victim);
-        }
-    }
 
     /**
      * @priority HIGHEST
@@ -353,7 +367,10 @@ class PlayerListener implements Listener{
         $p = $e->getPlayer();
         $y = $p->getFloorY();
         if($y > 79) {
-            $e->setCancelled();
+            if($p->isOnline()) {
+                $e->setCancelled();
+                Sounds::cancelSound($p);
+            }
         }
     }
     /**
@@ -362,43 +379,28 @@ class PlayerListener implements Listener{
     public function onUse(PlayerInteractEvent $e){
         $p = $e->getPlayer();
         $y = $p->getFloorY();
-        if($y > 79) {
-            $e->setCancelled();
-            Sounds::cancelSound($p);
+        if($p instanceof Player) {
+            if ($y > 79) {
+                if($p->isOnline()) {
+                    $e->setCancelled();
+                    Sounds::cancelSound($p);
+                }
+            }
         }
     }
-    /**
-     * @priority HIGHEST
-     */
-    public function onShoot(ProjectileLaunchEvent $e){
-        $p = $e->getEntity();
-        $y = $p->getFloorY();
-        if($y > 79){
-            $e->setCancelled();
-            Sounds::cancelSound($p);
-        }
-    }
-    /**
-     * @priority HIGHEST
-     */
-    public function onShoot2(EntityShootBowEvent $e){
-        $p = $e->getEntity();
-        $y = $p->getFloorY();
-        if($y > 79){
-            $e->setCancelled();
-            Sounds::cancelSound($p);
-        }
-    }
+
     /**
      * @priority HIGH
      */
     public function onPlace(BlockPlaceEvent $e){
         $p = $e->getPlayer();
-        $y = $p->getFloorY();
-        if($p->getGamemode() == 0){
-            if ($y > 79) {
-                $e->setCancelled();
-                Sounds::cancelSound($p);
+        if($p instanceof Player) {
+            $y = $p->getFloorY();
+            if ($p->getGamemode() == 0) {
+                if ($y > 79) {
+                    $e->setCancelled();
+                    Sounds::cancelSound($p);
+                }
             }
         }
     }

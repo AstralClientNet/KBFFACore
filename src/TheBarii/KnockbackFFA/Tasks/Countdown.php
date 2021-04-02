@@ -27,17 +27,21 @@ class Countdown extends Task{
     {
         if (!$this->num == 0){
             if(!$this->player == null) {
-                $this->player->addTitle("§l§cYOU DIED!", "§aRespawning In §b$this->num §aseconds.", 20, 60, 40);
-                $this->player->getInventory()->clearAll();
-                Sounds::tickSound($this->player);
+                if($this->player->isOnline()) {
+                    $this->player->addTitle("§l§cYOU DIED!", "§aRespawning In §b$this->num §aseconds.", 20, 60, 40);
+                    Sounds::tickSound($this->player);
+                    $this->player->getInventory()->clearAll();
+                }
             }
       }else {
             if(!$this->player == null) {
-                $this->player->setGamemode(0);
-                PlayerListener::setItems($this->player);
-                $this->player->teleport(new Vector3(244, 88, 182, 0, 0, Main::getInstance()->getServer()->getLevelByName("kbstick1")));
-                $this->player->setTagged(null);
-                Sounds::spawnSound($this->player);
+                if($this->player->isOnline()) {
+                    $this->player->setGamemode(0);
+                    PlayerListener::setItems($this->player);
+                    $this->player->teleport(new Vector3(244, 88, 182, 0, 0, Main::getInstance()->getServer()->getLevelByName("kbstick1")));
+                    Sounds::spawnSound($this->player);
+                    $this->player->setTagged(null);
+                }
             }
         }
     }
