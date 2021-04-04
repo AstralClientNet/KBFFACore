@@ -45,6 +45,9 @@ use pocketmine\event\entity\ProjectileLaunchEvent;
 use pocketmine\event\entity\EntityShootBowEvent;
 use TheBarii\KnockbackFFA\Utils;
 use pocketmine\item\Durable;
+use pocketmine\item\EnderPearl;
+use pocketmine\item\Snowball;
+use pocketmine\block\Sandstone;
 use TheBarii\KnockbackFFA\Tasks\Countdown;
 use TheBarii\KnockbackFFA\Sounds\Sounds;
 
@@ -95,12 +98,17 @@ class PlayerListener implements Listener{
      * @priority HIGHEST
      */
 
-    public function onDeath(EntityDamageEvent $e){
+    public function onDeath(EntityDamageByEntityEvent $e){
         $victim = $e->getEntity();
         if($victim instanceof Player) {
             if($victim->isOnline()) {
                 if ($e->getFinalDamage() >= $victim->getHealth()) {
-                    $this->respawnSystem($victim);
+                    if ($e->getDamager() instanceof Player) {
+                        if ($e->getDamager()->getInventory()->getItemInHand()->getCustomName() == "DaBaby") {
+                            $e->getDamager()->getInventory()->setItemInHand(Item::get(0, 0, 1));
+                        }
+                        $this->respawnSystem($victim);
+                    }
                 }
             }
         }
@@ -162,12 +170,6 @@ class PlayerListener implements Listener{
         $player = $event->getPlayer();
         $player->sendMessage("Unfortunately, you cannot change your skin here.");
         $event->setCancelled();
-
-    }
-
-    public function YouDied(Player $player, string $what){
-
-        $player->addTitle("§c§lYOU DIED!");
 
     }
 
@@ -240,8 +242,6 @@ class PlayerListener implements Listener{
             $e->setFormat("§4[$k]§r §4[Admin] ".$n."§r§f: §e$msg");
         }elseif($n == "Mo8rty"){
             $e->setFormat("§l§4[$k]§r §4§l[Owner] ".$n."§r§f: §c$msg");
-        }elseif($n == "DidntPot"){
-            $e->setFormat("§b[$k]§r §r§f§b[§r§l§5§k||§r§bDeveloper§r§l§5§k||§r§b] ".$n."§f: §e$msg");
         }else{
             $e->setFormat("§7[$k]§r §f".$n."§7: $msg");
         }
@@ -309,12 +309,10 @@ class PlayerListener implements Listener{
         $p->teleport(new Vector3($x, $y, $z, 0, 0, $level));
 
             $p->setGamemode(3);
-            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(5, $p), 20);
-            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(4, $p), 40);
-            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(3, $p), 60);
-            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(2, $p), 80);
-            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(1, $p), 90);
-            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(0, $p), 110);
+            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(3, $p), 20);
+            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(2, $p), 40);
+            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(1, $p), 60);
+            $this->plugin->getScheduler()->scheduleDelayedTask(new Countdown(0, $p), 80);
 
             $title = "§5§lTop Killstreaks §c§lLeaderboard";
             $ks = $this->plugin->getDatabaseHandler()->topKillstreaks($p->getName());
@@ -337,10 +335,35 @@ class PlayerListener implements Listener{
 
             if ($p->hasTagged()) {
                 $whoTagged = $p->getTagged();
-                $whoTagged->getInventory()->addItem(Item::get(368, 0, 1));
-                $whoTagged->getInventory()->addItem(Item::get(262, 0, 1));
+                $amountS = 0;
+                $amountE = 0;
+                $amountA = 0;
+                $amountB = 0;
+
+                foreach($whoTagged->getInventory()->getContents() as $items) {
+                    if ($items->getId() === Item::SANDSTONE){
+                        $amountS += $items->getCount();
+                    }elseif($items->getId() === Item::ENDERPEARL){
+                        $amountE += $items->getCount();
+                        $whoTagged->getInventory()->remove(Item::ENDERPEARL);
+                    }elseif($items->getId() === Item::ARROW){
+                        $amountA += $items->getCount();
+                        $whoTagged->getInventory()->remove(Item::ARROW);
+                    }elseif($items->getId() === Item::SNOWBALL){
+                        $amountB += $items->getCount();
+                        $whoTagged->getInventory()->remove(Item::SNOWBALL);
+                    }
+                }
+
+
+
+                $whoTagged->getInventory()->addItem(Item::get(Item::ARROW, 0, 1 + $amountA));
+                $whoTagged->getInventory()->addItem(Item::get(Item::ENDERPEARL, 0, 1 + $amountE));
+                $whoTagged->getInventory()->addItem(Item::get(Item::SNOWBALL, 0, 3 + $amountB));
+                $whoTagged->getInventory()->addItem(Item::get(Item::SANDSTONE, 0, 64 - $amountS));
                 $whoTagged->setHealth($whoTagged->getMaxHealth());
                 Sounds::levelupSound($whoTagged);
+
                 if ($whoTagged instanceof CPlayer) Utils::updateStats($whoTagged, 0);
                 $dn = $whoTagged->getName();
 
@@ -405,13 +428,6 @@ class PlayerListener implements Listener{
         }
     }
 
-    /**
-     * @priority LOW
-     */
-    public function onRespawn(PlayerRespawnEvent $e){
-        $p = $e->getPlayer();
-        $this->setItems($p);
-    }
     /**
      * @priority LOWEST
      */
