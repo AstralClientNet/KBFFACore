@@ -358,10 +358,10 @@ class PlayerListener implements Listener{
 
 
 
-                $whoTagged->getInventory()->addItem(Item::get(Item::ARROW, 0, 1 + $amountA));
-                $whoTagged->getInventory()->addItem(Item::get(Item::ENDER_PEARL, 0, 1 + $amountE));
-                $whoTagged->getInventory()->addItem(Item::get(Item::SNOWBALL, 0, 3 + $amountB));
-                $whoTagged->getInventory()->addItem(Item::get(Item::SANDSTONE, 0, 64 - $amountS));
+                $whoTagged->getInventory()->setItem(34, Item::get(Item::ARROW, 0, 1 + $amountA));
+                $whoTagged->getInventory()->setItem(2, Item::get(Item::ENDER_PEARL, 0, 1 + $amountE));
+                $whoTagged->getInventory()->setItem(4, Item::get(Item::SNOWBALL, 0, 3 + $amountB));
+                $whoTagged->getInventory()->setItem(5, Item::get(Item::SANDSTONE, 0, 64 - $amountS));
                 $whoTagged->setHealth($whoTagged->getMaxHealth());
                 Sounds::levelupSound($whoTagged);
 
@@ -500,7 +500,7 @@ class PlayerListener implements Listener{
         $p->getInventory()->setItem(8, $bow);
         $p->getInventory()->setItem(2, $enderpearl);
         $p->getInventory()->setItem(5, $stone);
-        $p->getInventory()->setItem(6, $arrow);
+        $p->getInventory()->setItem(34, $arrow);
         $p->getInventory()->setItem(4, $cob);
         $p->getInventory()->setItem(1, $pick);
 
