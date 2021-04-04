@@ -104,6 +104,7 @@ class PlayerListener implements Listener{
             if($victim->isOnline()) {
                 if ($e->getFinalDamage() >= $victim->getHealth()) {
                     if ($e->getDamager() instanceof Player) {
+                        $e->setCancelled();
                         if ($e->getDamager()->getInventory()->getItemInHand()->getCustomName() == "DaBaby") {
                             $e->getDamager()->getInventory()->setItemInHand(Item::get(0, 0, 1));
                         }
@@ -343,22 +344,22 @@ class PlayerListener implements Listener{
                 foreach($whoTagged->getInventory()->getContents() as $items) {
                     if ($items->getId() === Item::SANDSTONE){
                         $amountS += $items->getCount();
-                    }elseif($items->getId() === Item::ENDERPEARL){
+                    }elseif($items->getId() === Item::ENDER_PEARL){
                         $amountE += $items->getCount();
-                        $whoTagged->getInventory()->remove(Item::ENDERPEARL);
+                        $whoTagged->getInventory()->remove(Item::get(Item::ENDER_PEARL));
                     }elseif($items->getId() === Item::ARROW){
                         $amountA += $items->getCount();
-                        $whoTagged->getInventory()->remove(Item::ARROW);
+                        $whoTagged->getInventory()->remove(Item::get(Item::ARROW));
                     }elseif($items->getId() === Item::SNOWBALL){
                         $amountB += $items->getCount();
-                        $whoTagged->getInventory()->remove(Item::SNOWBALL);
+                        $whoTagged->getInventory()->remove(Item::get(Item::SNOWBALL));
                     }
                 }
 
 
 
                 $whoTagged->getInventory()->addItem(Item::get(Item::ARROW, 0, 1 + $amountA));
-                $whoTagged->getInventory()->addItem(Item::get(Item::ENDERPEARL, 0, 1 + $amountE));
+                $whoTagged->getInventory()->addItem(Item::get(Item::ENDER_PEARL, 0, 1 + $amountE));
                 $whoTagged->getInventory()->addItem(Item::get(Item::SNOWBALL, 0, 3 + $amountB));
                 $whoTagged->getInventory()->addItem(Item::get(Item::SANDSTONE, 0, 64 - $amountS));
                 $whoTagged->setHealth($whoTagged->getMaxHealth());
