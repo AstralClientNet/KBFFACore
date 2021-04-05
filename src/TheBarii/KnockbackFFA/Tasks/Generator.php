@@ -55,37 +55,34 @@ class Generator extends task{
 
     public function onRun(int $tick){
 
+        if(!count($this->plugin->getServer()->getOnlinePlayers()) == 0) {
+            $theFinalItem = rand(1, 3);
 
-        $theFinalItem = rand(1, 4);
+            //set the !!!!! ITEM!!!!!
+            if ($theFinalItem == 1) {
 
-        //set the !!!!! ITEM!!!!!
-        if ($theFinalItem == 1) {
+                $theitem = Item::get(368, 0, 1);
 
-            $theitem = Item::get(368, 0, 1);
+            } elseif ($theFinalItem == 2) {
 
-        } elseif ($theFinalItem == 2) {
+                $theitem = Item::get(262, 0, 1);
 
-            $theitem = Item::get(262, 0, 1);
+            } elseif ($theFinalItem == 3) {
 
-        } elseif ($theFinalItem == 3) {
+                $theitem = Item::get(332, 0, 1);
 
-            $theitem = Item::get(332, 0, 1);
+            }
 
-        } elseif ($theFinalItem == 4) {
+            $theFinalPos = rand(1, 2);
 
-            $theitem = Item::get(24, 0, 5);
-
+            if ($theFinalPos == 1) {
+                $pos = new Vector3(224, 69, 189);
+            } elseif ($theFinalPos == 2) {
+                $pos = new Vector3(240, 68, 204);
+            }
+            //THE DROP!!!!!!!!!!
+            $level = Main::getInstance()->getServer()->getLevelByName("kbstick1");
+            $level->dropItem($pos, $theitem);
         }
-
-        $theFinalPos = rand(1, 2);
-
-        if($theFinalPos == 1){
-            $pos = new Vector3(224, 69, 189);
-        }elseif($theFinalPos == 2){
-            $pos = new Vector3(240, 68, 204);
-        }
-        //THE DROP!!!!!!!!!!
-        $level = Main::getInstance()->getServer()->getLevelByName("kbstick1");
-        $level->dropItem($pos, $theitem);
     }
 }

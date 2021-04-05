@@ -43,6 +43,7 @@ use pocketmine\item\enchantment\Enchantment;
 use pocketmine\event\entity\ProjectileHitEntityEvent;
 use pocketmine\event\entity\ProjectileLaunchEvent;
 use pocketmine\event\entity\EntityShootBowEvent;
+use pocketmine\event\inventory\InventoryPickupItemEvent;
 use TheBarii\KnockbackFFA\Utils;
 use pocketmine\item\Durable;
 use pocketmine\item\EnderPearl;
@@ -104,11 +105,15 @@ class PlayerListener implements Listener{
             if($victim->isOnline()) {
                 if ($e->getFinalDamage() >= $victim->getHealth()) {
                     if ($e->getDamager() instanceof Player) {
+                        if(!$e->getDamager()->getFloorY() >= 79){
                         $e->setCancelled();
+                        $this->respawnSystem($victim);
                         if ($e->getDamager()->getInventory()->getItemInHand()->getCustomName() == "DaBaby") {
                             $e->getDamager()->getInventory()->setItemInHand(Item::get(0, 0, 1));
+                         }
+                        }else{
+                            Sounds::cantHit($e->getDamager());
                         }
-                        $this->respawnSystem($victim);
                     }
                 }
             }
@@ -173,6 +178,44 @@ class PlayerListener implements Listener{
         $event->setCancelled();
 
     }
+
+    /**
+     * @priority HIGH
+     */
+     public function onPickup(InventoryPickupItemEvent $e){
+
+         foreach($e->getPlayer()->getInventory()->getContents() as $items) {
+                 if($e->getItem()->getItem() == Item::ENDER_PEARL) {
+                     if($items->getId() === Item::ENDER_PEARL){
+                         $amount = $e->getItem()->getItem()->getCount() + $items->getCount();
+                     $e->getPlayer()->getInventory()->remove(Item::get(Item::ENDER_PEARL));
+                     $e->getPlayer()->getInventory()->setItem(2, Item::get(Item::ENDER_PEARL, 0, $amount));
+                         $e->setCancelled();
+                 }
+             }elseif($e->getItem()->getItem() == Item::SNOWBALL) {
+                     if($items->getId() === Item::SNOWBALL){
+                         $amount = $e->getItem()->getItem()->getCount() + $items->getCount();
+                         $e->getPlayer()->getInventory()->remove(Item::get(Item::SNOWBALL));
+                         $e->getPlayer()->getInventory()->setItem(4, Item::get(Item::SNOWBALL, 0, $amount));
+                         $e->setCancelled();
+                     }
+                 }elseif($e->getItem()->getItem() == Item::SANDSTONE) {
+                     if($items->getId() === Item::SANDSTONE){
+                         $amount = $e->getItem()->getItem()->getCount() + $items->getCount();
+                         $e->getPlayer()->getInventory()->remove(Item::get(Item::SANDSTONE));
+                         $e->getPlayer()->getInventory()->setItem(5, Item::get(Item::SANDSTONE, 0, $amount));
+                         $e->setCancelled();
+                     }
+                 }elseif($e->getItem()->getItem() == Item::ARROW) {
+                     if($items->getId() === Item::ARROW){
+                         $amount = $e->getItem()->getItem()->getCount() + $items->getCount();
+                         $e->getPlayer()->getInventory()->remove(Item::get(Item::ARROW));
+                         $e->getPlayer()->getInventory()->setItem(34, Item::get(Item::ARROW, 0, $amount));
+                         $e->setCancelled();
+                     }
+                 }
+             }
+         }
 
     public function onPreLogin(PlayerPreLoginEvent $event)
     {
@@ -361,7 +404,8 @@ class PlayerListener implements Listener{
                 $whoTagged->getInventory()->setItem(34, Item::get(Item::ARROW, 0, 1 + $amountA));
                 $whoTagged->getInventory()->setItem(2, Item::get(Item::ENDER_PEARL, 0, 1 + $amountE));
                 $whoTagged->getInventory()->setItem(4, Item::get(Item::SNOWBALL, 0, 3 + $amountB));
-                $whoTagged->getInventory()->setItem(5, Item::get(Item::SANDSTONE, 0, 64 - $amountS));
+                $whoTagged->getInventory()->setItem(5, Item::get(Item::SANDSTONE, 0, $amountS + (64 - $amountS)));
+
                 $whoTagged->setHealth($whoTagged->getMaxHealth());
                 Sounds::levelupSound($whoTagged);
 
@@ -389,12 +433,9 @@ class PlayerListener implements Listener{
      */
     public function onDrop(PlayerDropItemEvent $e){
         $p = $e->getPlayer();
-        $y = $p->getFloorY();
-        if($y > 79) {
             if($p->isOnline()) {
                 $e->setCancelled();
                 Sounds::cancelSound($p);
-            }
         }
     }
     /**
@@ -491,7 +532,6 @@ class PlayerListener implements Listener{
         $p->setGamemode(0);
         $p->setMaxHealth(20);
         $p->setHealth(20);
-        $p->getInventory()->setSize(30);
         $p->getInventory()->clearAll();
         $p->getArmorInventory()->clearAll();
 

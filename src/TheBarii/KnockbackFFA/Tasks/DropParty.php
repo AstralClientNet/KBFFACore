@@ -57,46 +57,43 @@ class DropParty extends Task
     {
 
         //compile how much
-
-        $thefinalMuch = rand(1, 15);
-
-
-        $theFinalItem = rand(1, 5);
-
-        //set the !!!!! ITEM!!!!!
-        if ($theFinalItem == 1) {
-
-            $theitem = Item::get(368, 0, (int)$thefinalMuch);
-
-        } elseif ($theFinalItem == 2) {
-
-            $theitem = Item::get(262, 0, (int)$thefinalMuch);
-
-        } elseif ($theFinalItem == 3) {
-
-            $theitem = Item::get(332, 0, (int)$thefinalMuch);
-
-        } elseif ($theFinalItem == 5) {
-
-            $theitem = Item::get(268, 0, 1);
-            $kb = Enchantment::getEnchantment(9);
-            $theitem->addEnchantment(new EnchantmentInstance($kb, 32000));
-            $theitem->setDamage(59);
-            $theitem->setCustomName("DaBaby");
-
-        } elseif ($theFinalItem == 4) {
-
-            $theitem = Item::get(24, 0, (int)$thefinalMuch);
-
-        }
+        if (!count($this->plugin->getServer()->getOnlinePlayers()) == 0) {
+            $thefinalMuch = rand(1, 15);
 
 
-        //THE DROP!!!!!!!!!!
-        $level = Main::getInstance()->getServer()->getLevelByName("kbstick1");
-        $pos = new Vector3(251, 76, 176);
-        $level->dropItem($pos, $theitem);
+            $theFinalItem = rand(1, 4);
 
-        //yusz
+            //set the !!!!! ITEM!!!!!
+            if ($theFinalItem == 1) {
+
+                $theitem = Item::get(368, 0, (int)$thefinalMuch);
+
+            } elseif ($theFinalItem == 2) {
+
+                $theitem = Item::get(262, 0, (int)$thefinalMuch);
+
+            } elseif ($theFinalItem == 3) {
+
+                $theitem = Item::get(332, 0, (int)$thefinalMuch);
+
+            } elseif ($theFinalItem == 4) {
+
+                $theitem = Item::get(268, 0, 1);
+                $kb = Enchantment::getEnchantment(9);
+                $theitem->addEnchantment(new EnchantmentInstance($kb, 32000));
+                $theitem->setDamage(59);
+                $theitem->setCustomName("DaBaby");
+
+            }
+
+
+            //THE DROP!!!!!!!!!!
+            $level = Main::getInstance()->getServer()->getLevelByName("kbstick1");
+            $pos = new Vector3(251, 76, 176);
+            $level->dropItem($pos, $theitem);
+
+            //yusz
             Main::getInstance()->getServer()->broadcastMessage("§kll§r  §7Item(s) with the amount of §c" . (int)$thefinalMuch . " §7has been spawned at middle!  §r§kll");
+        }
     }
 }
